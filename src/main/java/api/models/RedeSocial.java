@@ -1,11 +1,22 @@
 package api.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.Objects;
 
+@Entity
 public class RedeSocial {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
     private String nome;
     private int quantidadeDeSeguidores;
     private String linkDoPerfil;
+
+    public RedeSocial(){}
 
     public RedeSocial(String nome, int quantidadeDeSeguidores, String linkDoPerfil) {
         this.nome = nome;

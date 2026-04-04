@@ -1,12 +1,23 @@
 package api.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.Objects;
 
+@Entity
 public class Empresa {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
     private String nome;
     private String cnpj;
     private double valorDaPubli;
     private String email;
+
+    public Empresa() {}
 
     public Empresa(String nome, String cnpj, double valorDaPubli, String email) {
         this.nome = nome;

@@ -1,7 +1,5 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!docker-compose.yml
-!application.properties
 !**/src/main/**/target/
 !**/src/test/**/target/
 .kotlin
@@ -11,6 +9,8 @@ target/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+application.properties
+docker-compose.yml
 *.iws
 *.iml
 *.ipr

@@ -1,4 +1,4 @@
-package api.models;
+package app.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Empresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
     private String nome;
     private String cnpj;
     private double valorDaPubli;

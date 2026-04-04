@@ -1,7 +1,7 @@
-package api.services;
+package app.services;
 
-import api.models.Influencer;
-import api.repositorys.InfluencerRepository;
+import app.models.Influencer;
+import app.repositorys.InfluencerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

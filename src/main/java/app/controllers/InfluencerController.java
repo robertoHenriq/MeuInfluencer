@@ -1,27 +1,29 @@
-package api.controllers;
+package app.controllers;
 
-
-import api.models.Influencer;
-import api.services.InfluencerService;
+import app.models.Influencer;
+import app.services.InfluencerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/Influencer")
+@RequestMapping("/influencer")
 public class InfluencerController {
 
-    InfluencerService influencerService;
+    private final InfluencerService influencerService;
 
-    @PostMapping
-    @RequestMapping("/influencer/adicionar")
+    public InfluencerController(InfluencerService influencerService) {
+        this.influencerService = influencerService;
+    }
+
+    @PostMapping("/adicionar")
     public String adicionarInfluencer(@RequestBody Influencer influencer){
         return influencer.getNome() + " cadastrado com sucesso!";
     }
 
-    @GetMapping
-    @RequestMapping("/influencer/listar")
+    @GetMapping("/listar")
     public List<Influencer> listarInfluencers(){
         return influencerService.listarInfluencers();
     }
+
 }

@@ -1,9 +1,6 @@
-package api.models;
+package app.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -11,9 +8,11 @@ import java.util.List;
 public class Influencer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
     private String nome;
     private int quantidadeDeSeguidoresTotal;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "Influencer_id")
     private List<RedeSocial> redesSociais;
 
     public String cadastrarNome(String nome){

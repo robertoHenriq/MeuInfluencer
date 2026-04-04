@@ -1,7 +1,7 @@
-package app.controllers;
+package app.Influencer.controllers;
 
-import app.models.Influencer;
-import app.services.InfluencerService;
+import app.Influencer.models.Influencer;
+import app.Influencer.services.InfluencerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,5 +25,11 @@ public class InfluencerController {
     public List<Influencer> listarInfluencers(){
         return influencerService.listarInfluencers();
     }
+
+    @GetMapping("test")
+    public String test(){
+        return "test";
+    }
+
 
 }

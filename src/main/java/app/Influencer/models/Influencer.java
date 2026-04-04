@@ -1,5 +1,6 @@
-package app.models;
+package app.Influencer.models;
 
+import app.RedeSocial;
 import jakarta.persistence.*;
 
 import java.util.List;

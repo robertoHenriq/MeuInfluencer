@@ -1,6 +1,6 @@
-package app.repositorys;
+package app.Influencer.repositorys;
 
-import app.models.Influencer;
+import app.Influencer.models.Influencer;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

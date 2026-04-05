@@ -4,8 +4,6 @@ import app.Influencer.models.Influencer;
 import app.Influencer.repositorys.InfluencerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.List;
 
 @Service
@@ -24,16 +22,14 @@ public class InfluencerService {
         influencerRepository.save(influencer);
     }
 
-    public Influencer editarInfluencer(Influencer i){
-        if(influencerRepository.existsById(i.getId())){
-            influencerRepository.deleteById(i.getId());
-            adicionar(i);
-        }
-        return i;
+    public void editarInfluencer(Influencer i){
+        influencerRepository.save(i); // O Spring resolve se é novo ou edição
     }
 
     public void removerInfluencer(Integer i){
         influencerRepository.deleteById(i);
 
     }
+
+
 }

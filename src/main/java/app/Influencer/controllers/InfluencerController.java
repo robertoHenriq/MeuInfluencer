@@ -2,11 +2,12 @@ package app.Influencer.controllers;
 
 import app.Influencer.models.Influencer;
 import app.Influencer.services.InfluencerService;
+import app.RedeSocial;
+import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("/influencer")
 public class InfluencerController {
 
@@ -16,19 +17,33 @@ public class InfluencerController {
         this.influencerService = influencerService;
     }
 
+    @GetMapping("/dashboard")
+    public String abrirDashboard(Model model) {
+        model.addAttribute("influenciadores", influencerService.listarInfluencers());
+        Influencer novoInfluencer = new Influencer();
+        novoInfluencer.getRedesSociais().add(new RedeSocial());
+        model.addAttribute("influencer", novoInfluencer);
+        return "influenciadores";
+    }
+
     @PostMapping("/adicionar")
-    public String adicionarInfluencer(@RequestBody Influencer influencer){
-        return influencer.getNome() + " cadastrado com sucesso!";
+    public String adicionarInfluencer(@ModelAttribute Influencer influencer){
+        influencer.atualizarTotalSeguidores();
+        influencerService.adicionar(influencer);
+        return "redirect:/influencer/dashboard";
     }
 
-    @GetMapping("/listar")
-    public List<Influencer> listarInfluencers(){
-        return influencerService.listarInfluencers();
+
+    @PostMapping("/editar")
+    public String editarInfluencer(@ModelAttribute Influencer i){
+        influencerService.editarInfluencer(i);
+        return "redirect:/influencer/dashboard"; // Volta para a tela principal atualizada
     }
 
-    @GetMapping("test")
-    public String test(){
-        return "test";
+    @GetMapping("/deletar/{id}")
+    public String deletar(@PathVariable Integer id){
+        influencerService.removerInfluencer(id);
+        return "redirect:/influencer/dashboard"; // Isso manda o navegador recarregar a página da lista
     }
 
 

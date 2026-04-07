@@ -26,8 +26,6 @@ public class EmpresaController {
         return "empresas";
     }
 
-
-
     @PostMapping("/adicionar")
     public String adicionarEmpresa(@ModelAttribute Empresa empresa){
         empresaService.adicionarEmpresa(empresa);

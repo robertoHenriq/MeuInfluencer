@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Pagamento - Mercado Pago Bricks</title>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <style>
+        /* Estilização básica para centralizar o checkout */
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; padding: 20px; }
+        #checkout-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+    </style>
+</head>
+<body>
+
+<div id="checkout-container">
+    <h2>Checkout</h2>
+    <div id="paymentBrick_container"></div>
+</div>
+
+<div id="walletWidgets"></div>
+
+<script>
+    const mp = new MercadoPago('TEST-f53fb791-76b0-4e09-ba40-ddd7daa554dc', {
+        locale: 'pt-BR'
+    });
+
+    const bricksBuilder = mp.bricks();
+
+    const renderPaymentBrick = async (bricksBuilder) => {
+        const settings = {
+            initialization: {
+                amount: 100.00,
+                payer: {
+                    email: 'cliente@exemplo.com.br'
+                }
+            },
+            customization: {
+                paymentMethods: {
+                    bankTransfer: ['pix'],
+                    creditCard: [],
+                    ticket: [],
+                },
+            },
+            callbacks: {
+                onReady: () => {
+                    console.log("Brick pronto!");
+                },
+                // ADICIONE ESTE BLOCO:
+                onError: (error) => {
+                    console.error("Erro no Brick:", error);
+                },
+                onSubmit: ({ selectedPaymentMethod, formData }) => {
+                    return new Promise((resolve, reject) => {
+                        fetch("/processarpagamento/processar", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(formData),
+                        })
+                            .then(async response => {
+                                const isJson = response.headers.get('content-type')?.includes('application/json');
+                                const data = isJson ? await response.json() : null;
+
+                                if (response.ok) {
+                                    console.log("Sucesso Pix:", data);
+                                    // Aqui você pode mostrar o QR Code que veio no 'data'
+                                    resolve();
+                                } else {
+                                    // Se não for JSON, lê como texto para não dar erro de 'token D'
+                                    const errorText = data ? data.message : await response.text();
+                                    console.error("Erro do Servidor:", errorText);
+                                    reject();
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Erro na requisição:", error);
+                                reject();
+                            });
+                    });
+                }
+            }
+        };
+
+        const paymentBrickController = await bricksBuilder.create(
+            'payment',
+            'paymentBrick_container',
+            settings
+        );
+    };
+
+    renderPaymentBrick(bricksBuilder);
+</script>
+</body>
+</html>

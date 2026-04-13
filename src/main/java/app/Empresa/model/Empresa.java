@@ -21,9 +21,10 @@ public class Empresa {
 
     public Empresa() {}
 
-    public Empresa(String nome, String cnpj, double valor, String email, String segmento) {
+    public Empresa(String nome, String cnpj, String senha, double valor, String email, String segmento) {
         this.nome = nome;
         this.cnpj = cnpj;
+        this.senha = senha;
         this.saldo = saldo;
         this.email = email;
         this.segmento = segmento;

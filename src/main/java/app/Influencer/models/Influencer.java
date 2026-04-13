@@ -12,6 +12,7 @@ public class Influencer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
+    private String email;
     private String senha;
     private int seguidores;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -21,6 +22,8 @@ public class Influencer {
     public Influencer(Influencer influencer){
         this.id = influencer.getId();
         this.nome = influencer.getNome();
+        this.email = influencer.getEmail();
+        this.senha = influencer.getSenha();
         this.redesSociais = influencer.redesSociais;
         this.seguidores = influencer.getSeguidores()    ;
     }
@@ -80,5 +83,13 @@ public class Influencer {
 
     public void setRedesSociais(List<RedeSocial> redesSociais) {
         this.redesSociais = redesSociais;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -97,8 +97,7 @@
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
                                     <div class="h-10 w-10 rounded-full bg-gradient-to-tr from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold mr-3 shadow-md">
-                                        <span th:text="${#strings.substring(inf.nome,0,1)}">I</span>
-                                    </div>
+                                        <span th:text="${inf.nome != null and !inf.nome.isEmpty() ? #strings.substring(inf.nome, 0, 1) : '?' }"></span>                                    </div>
                                     <span class="font-semibold text-gray-700" th:text="${inf.nome}">Nome</span>
                                 </div>
                             </td>

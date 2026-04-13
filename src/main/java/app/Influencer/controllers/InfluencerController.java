@@ -26,14 +26,6 @@ public class InfluencerController {
         return "influenciadores";
     }
 
-    @PostMapping("/adicionar")
-    public String adicionarInfluencer(@ModelAttribute Influencer influencer){
-        influencer.atualizarTotalSeguidores();
-        influencerService.adicionar(influencer);
-        return "redirect:/influencer/dashboard";
-    }
-
-
     @PostMapping("/editar")
     public String editarInfluencer(@ModelAttribute Influencer i){
         influencerService.editarInfluencer(i);

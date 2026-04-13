@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Conecte-se | Cadastro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-6">
+
+<div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+    <div class="bg-indigo-600 p-8 text-white text-center">
+        <h2 class="text-3xl font-extrabold tracking-tight">Crie sua conta</h2>
+        <p class="text-indigo-100 mt-2">Escolha seu perfil e comece agora</p>
+    </div>
+
+    <div class="p-8">
+        <div class="mb-8">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Eu sou um(a):</label>
+            <select id="seletorTipo" onchange="trocarFormulario()"
+                    class="w-full bg-slate-50 border border-slate-200 text-slate-700 py-3 px-4 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all cursor-pointer font-medium">
+                <option value="influencer">🌟 Influencer</option>
+                <option value="empresa">🏢 Empresa</option>
+            </select>
+        </div>
+
+        <form id="formInfluencer" th:action="@{/cadastro/influencer}" th:object="${influencer}" method="POST" class="space-y-5">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Nome Artístico</label>
+                    <input type="text" th:field="*{nome}" placeholder="Seu nome de destaque"
+                           class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition-all">
+                </div>
+
+                <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
+                    <label class="block text-xs font-bold text-indigo-600 uppercase mb-3"><i class="fas fa-share-nodes mr-1"></i> Rede Social Principal</label>
+                    <div class="grid grid-cols-1 gap-3">
+                        <input type="text" th:field="*{redesSociais[0].nome}" placeholder="Nome da Rede (ex: Instagram)"
+                               class="w-full px-4 py-2 rounded-lg border-none focus:ring-2 focus:ring-indigo-400 outline-none">
+                        <input type="text" th:field="*{redesSociais[0].linkDoPerfil}" placeholder="Link do seu perfil"
+                               class="w-full px-4 py-2 rounded-lg border-none focus:ring-2 focus:ring-indigo-400 outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-200 transform hover:-translate-y-1 transition-all">
+                Finalizar Cadastro <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </form>
+
+        <form id="formEmpresa" th:action="@{/cadastro/empresa}" th:object="${empresa}" method="POST" class="space-y-5" style="display: none;">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Razão Social</label>
+                    <input type="text" th:field="*{nome}" placeholder="Nome da sua empresa"
+                           class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 outline-none transition-all">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">CNPJ</label>
+                        <input type="text" th:field="*{cnpj}" placeholder="00.000..."
+                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-blue-100 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Saldo</label>
+                        <input type="number" th:field="*{saldo}" placeholder="R$ 0,00"
+                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-blue-100 outline-none transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 transform hover:-translate-y-1 transition-all">
+                Cadastrar Empresa <i class="fas fa-building ml-2"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function trocarFormulario() {
+        const tipo = document.getElementById('seletorTipo').value;
+        const formInf = document.getElementById('formInfluencer');
+        const formEmp = document.getElementById('formEmpresa');
+
+        if (tipo === 'influencer') {
+            formInf.style.display = 'block';
+            formEmp.style.display = 'none';
+        } else {
+            formInf.style.display = 'none';
+            formEmp.style.display = 'block';
+        }
+    }
+</script>
+</body>
+</html>

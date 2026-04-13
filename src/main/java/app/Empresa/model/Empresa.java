@@ -14,6 +14,7 @@ public class Empresa {
     private Integer id;
     private String nome;
     private String cnpj;
+    private String senha;
     private double saldo;
     private String email;
     private String segmento;
@@ -74,5 +75,12 @@ public class Empresa {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

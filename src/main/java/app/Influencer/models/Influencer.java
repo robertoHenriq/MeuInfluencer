@@ -12,6 +12,7 @@ public class Influencer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
+    private String senha;
     private int seguidores;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "influencer_id")
@@ -67,6 +68,14 @@ public class Influencer {
 
     public List<RedeSocial> getRedesSociais() {
         return redesSociais;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public void setRedesSociais(List<RedeSocial> redesSociais) {

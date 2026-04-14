@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Conecte-se | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-6">
+
+<div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+    <div id="headerColor" class="bg-indigo-600 p-8 text-white text-center transition-colors duration-500">
+        <h2 class="text-3xl font-extrabold tracking-tight">Bem-vindo de volta</h2>
+        <p class="text-indigo-100 mt-2">Acesse sua conta para continuar</p>
+    </div>
+
+    <div class="p-8">
+        <div class="mb-8">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Entrar como:</label>
+            <div class="flex bg-slate-100 p-1 rounded-xl">
+                <button onclick="setLoginType('influencer')" id="btnInf"
+                        class="flex-1 py-2 rounded-lg font-bold text-sm transition-all bg-white text-indigo-600 shadow-sm">
+                    🌟 Influencer
+                </button>
+                <button onclick="setLoginType('empresa')" id="btnEmp"
+                        class="flex-1 py-2 rounded-lg font-bold text-sm transition-all text-slate-500 hover:text-slate-700">
+                    🏢 Empresa
+                </button>
+            </div>
+        </div>
+
+        <form th:action="@{/login}" method="POST" class="space-y-6">
+            <input type="hidden" name="tipoUsuario" id="tipoUsuario" value="influencer">
+
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase mb-1 ml-1">E-mail</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                    <input type="email" name="username" placeholder="seu@email.com" required
+                           class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-100 outline-none transition-all">
+                </div>
+            </div>
+
+            <div>
+                <div class="flex justify-between mb-1 ml-1">
+                    <label class="block text-xs font-bold text-slate-600 uppercase">Senha</label>
+                    <a href="#" class="text-xs font-semibold text-indigo-600 hover:underline">Esqueceu a senha?</a>
+                </div>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                    <input type="password" name="password" placeholder="••••••••" required
+                           class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-100 outline-none transition-all">
+                </div>
+            </div>
+
+            <button type="submit" id="btnLogin"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-200 transform hover:-translate-y-1 transition-all">
+                Entrar na Plataforma
+            </button>
+        </form>
+
+        <p class="text-center mt-8 text-slate-500 text-sm">
+            Ainda não tem conta?
+            <a th:href="@{/cadastro}" class="text-indigo-600 font-bold hover:underline">Cadastre-se aqui</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    function setLoginType(tipo) {
+        const inputTipo = document.getElementById('tipoUsuario');
+        const header = document.getElementById('headerColor');
+        const btnInf = document.getElementById('btnInf');
+        const btnEmp = document.getElementById('btnEmp');
+        const btnLogin = document.getElementById('btnLogin');
+
+        inputTipo.value = tipo;
+
+        if (tipo === 'influencer') {
+            // Estilo Influencer (Indigo)
+            header.className = 'bg-indigo-600 p-8 text-white text-center transition-colors duration-500';
+            btnLogin.className = 'w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-200 transform hover:-translate-y-1 transition-all';
+            btnInf.className = 'flex-1 py-2 rounded-lg font-bold text-sm transition-all bg-white text-indigo-600 shadow-sm';
+            btnEmp.className = 'flex-1 py-2 rounded-lg font-bold text-sm transition-all text-slate-500 hover:text-slate-700';
+        } else {
+            // Estilo Empresa (Blue)
+            header.className = 'bg-blue-600 p-8 text-white text-center transition-colors duration-500';
+            btnLogin.className = 'w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 transform hover:-translate-y-1 transition-all';
+            btnEmp.className = 'flex-1 py-2 rounded-lg font-bold text-sm transition-all bg-white text-blue-600 shadow-sm';
+            btnInf.className = 'flex-1 py-2 rounded-lg font-bold text-sm transition-all text-slate-500 hover:text-slate-700';
+        }
+    }
+</script>
+</body>
+</html>

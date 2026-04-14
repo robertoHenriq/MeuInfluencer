@@ -1,42 +1,33 @@
 package app.Empresa.model;
 
+import app.usuario.model.TipoUsuarios;
+import app.usuario.model.Usuario;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-import java.util.Objects;
 
 @Entity
-public class Empresa {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String nome;
+public class Empresa extends Usuario {
+
     private String cnpj;
-    private String senha;
     private double saldo;
-    private String email;
     private String segmento;
 
     public Empresa() {}
 
-    public Empresa(String nome, String cnpj, String senha, double valor, String email, String segmento) {
-        this.nome = nome;
+    public Empresa(int id, String nome, String cnpj, String senha, String email, String segmento) {
+
+        super(nome, senha, email, TipoUsuarios.EMPRESA);
         this.cnpj = cnpj;
-        this.senha = senha;
-        this.saldo = saldo;
-        this.email = email;
         this.segmento = segmento;
     }
 
-    public String getNome() {
-        return nome;
+    public void depositar(double valor) {
+        this.saldo += valor;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public double retornaSaldo() {
+        return this.saldo;
     }
+
 
     public String getCnpj() {
         return cnpj;
@@ -54,13 +45,6 @@ public class Empresa {
         this.saldo = saldo;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getSegmento() {
         return segmento;
@@ -70,18 +54,4 @@ public class Empresa {
         this.segmento = segmento;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
 }

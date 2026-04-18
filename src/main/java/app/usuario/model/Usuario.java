@@ -1,9 +1,15 @@
 package app.usuario.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @MappedSuperclass
-public abstract class Usuario {
+public abstract class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
@@ -59,5 +65,26 @@ public abstract class Usuario {
 
     public void setTipoUsuario(TipoUsuarios tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email; // Usaremos o e-mail como login
+    }
+
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return true; }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Aqui você define as permissões baseadas no TipoUsuario
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.tipoUsuario.name()));
     }
 }

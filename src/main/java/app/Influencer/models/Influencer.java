@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@MappedSuperclass
 public class Influencer extends Usuario {
 
     private int seguidores;

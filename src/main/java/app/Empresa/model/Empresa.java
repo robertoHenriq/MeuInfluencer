@@ -3,8 +3,10 @@ package app.Empresa.model;
 import app.usuario.model.TipoUsuarios;
 import app.usuario.model.Usuario;
 import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
 
 @Entity
+@MappedSuperclass
 public class Empresa extends Usuario {
 
     private String cnpj;

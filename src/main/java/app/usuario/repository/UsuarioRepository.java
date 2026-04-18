@@ -1,6 +1,5 @@
-package app.Empresa.repository;
+package app.usuario.repository;
 
-import app.Empresa.model.Empresa;
 import app.usuario.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
-    Optional<Empresa> findByEmail(String email);
+public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
+    Optional<Usuario> findByEmail(String email);
 }

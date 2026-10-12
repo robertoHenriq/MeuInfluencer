@@ -1,3 +1,11 @@
+# Meu Influencer PB
+
+Plataforma de conexão entre pequenas empresas e criadores de conteúdo da Paraíba.
+
+## 📸 Prévia do Sistema
+
+![Tela do Sistema](src/main/resources/Captura-de-Tela-(6).png)
+
 Sistema web desenvolvido para o gerenciamento de influenciadores digitais, empresas e suas respectivas redes sociais e nichos de mercado.
 
 🛠️ Tecnologias Utilizadas

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Funciona - Meu Influencer PB</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .animated-wallpaper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: #050505;
+            overflow: hidden;
+        }
+        .wallpaper-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            animation: moveGlow 15s infinite alternate ease-in-out;
+        }
+        .wallpaper-glow:nth-child(2) {
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(139, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            animation: moveGlow2 20s infinite alternate ease-in-out;
+        }
+        @keyframes moveGlow {
+            0% { transform: translate(-10%, -10%) scale(1); }
+            100% { transform: translate(30vw, 40vh) scale(1.2); }
+        }
+        @keyframes moveGlow2 {
+            0% { transform: translate(10%, 10%) scale(1); }
+            100% { transform: translate(-30vw, -30vh) scale(1.3); }
+        }
+        .text-gradient-pb {
+            background: linear-gradient(135deg, #ffffff 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-100 font-sans antialiased selection:bg-red-600 selection:text-white flex flex-col min-h-screen relative">
+
+    <!-- Fundo Animado Wallpaper -->
+    <div class="animated-wallpaper">
+        <div class="wallpaper-glow"></div>
+        <div class="wallpaper-glow"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(#dc2626_0.75px,transparent_0.75px)] [background-size:32px_32px] opacity-10"></div>
+    </div>
+
+    <!-- Cabeçalho / Navbar Integrada -->
+    <header class="sticky top-0 z-50 bg-black/85 backdrop-blur-md border-b border-red-900/40">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <div class="w-12 h-8 rounded-lg overflow-hidden border border-red-900/60 shadow-md group-hover:scale-105 transition flex-shrink-0 bg-red-600">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Bandeira_da_Para%C3%ADba.svg" 
+                         alt="Bandeira da Paraíba" 
+                         class="w-full h-full object-cover">
+                </div>
+                <span class="text-2xl font-black tracking-tight text-white">
+                    MEU<span class="text-red-600">INFLUENCER</span>
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300">
+                <a href="/" class="hover:text-red-500 transition">Início</a>
+                <a href="/como-funciona" class="text-red-500 transition font-bold">Como Funciona</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <a href="/empresa" class="text-xs sm:text-sm font-bold text-gray-300 hover:text-white px-4 py-2 rounded-xl border border-red-900/50 hover:bg-red-950/40 transition">
+                    Área Empresa
+                </a>
+                <a href="/influencer/dashboard" class="text-xs sm:text-sm font-bold bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl shadow-lg shadow-red-600/30 transition">
+                    Área Criador
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. Banner Principal -->
+    <section class="py-20 text-center relative z-10">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-950/80 border border-red-600/50 text-red-400 text-xs font-extrabold uppercase tracking-widest mb-6">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Bandeira_da_Para%C3%ADba.svg" alt="PB" class="w-5 h-3.5 object-cover rounded-xs"> 
+                Simples, Seguro e Transparente
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6 uppercase text-white leading-tight">
+                Como Funciona a <span class="text-gradient-pb">Nossa Plataforma</span>
+            </h1>
+            <p class="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+                Entenda o passo a passo completo de como conectamos pequenas empresas e criadores de conteúdo na Paraíba com total segurança financeira e clareza.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="/empresa" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition">
+                    Quero divulgar minha empresa
+                </a>
+                <a href="/influencer/dashboard" class="bg-zinc-900 border border-zinc-700 hover:border-red-600 text-white font-bold py-3 px-8 rounded-xl transition">
+                    Quero ser influenciador
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Escolha seu Perfil (Abas Interativas) -->
+    <section class="py-16 bg-zinc-950/60 backdrop-blur-md border-y border-red-900/20">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold text-white">Escolha seu Perfil</h2>
+                <p class="text-gray-400 text-sm mt-2">Veja o fluxo detalhado para cada lado da nossa comunidade.</p>
+                
+                <!-- Botões de Alternância -->
+                <div class="flex justify-center gap-4 mt-6">
+                    <button onclick="mudarPerfil('empresa')" id="btn-empresa" class="px-6 py-3 rounded-xl font-bold text-sm bg-red-600 text-white shadow-lg transition">
+                        Sou uma Empresa
+                    </button>
+                    <button onclick="mudarPerfil('influenciador')" id="btn-influenciador" class="px-6 py-3 rounded-xl font-bold text-sm bg-zinc-900 text-gray-400 border border-zinc-800 transition">
+                        Sou um Influenciador
+                    </button>
+                </div>
+            </div>
+
+            <!-- Conteúdo: Fluxo Empresa -->
+            <div id="fluxo-empresa" class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-black/80 border border-zinc-800 p-6 rounded-2xl relative">
+                    <span class="text-red-500 font-black text-3xl block mb-3">01</span>
+                    <h3 class="font-bold text-white mb-2">Cadastro e Perfil</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Crie sua conta preenchendo as informações básicas e os dados corporativos da sua marca.</p>
+                </div>
+                <div class="bg-black/80 border border-zinc-800 p-6 rounded-2xl relative">
+                    <span class="text-red-500 font-black text-3xl block mb-3">02</span>
+                    <h3 class="font-bold text-white mb-2">Busca de Talentos</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Encontre criadores alinhados ao seu nicho, avaliando seguidores e estilo de engajamento.</p>
+                </div>
+                <div class="bg-black/80 border border-zinc-800 p-6 rounded-2xl relative">
+                    <span class="text-red-500 font-black text-3xl block mb-3">03</span>
+                    <h3 class="font-bold text-white mb-2">Definição e Depósito</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Informe os prazos, orientações da campanha e faça o depósito do valor acordado na plataforma.</p>
+                </div>
+                <div class="bg-black/80 border border-zinc-800 p-6 rounded-2xl relative">
+                    <span class="text-red-500 font-black text-3xl block mb-3">04</span>
+                    <h3 class="font-bold text-white mb-2">Validação e Conclusão</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Verifique a entrega do serviço realizada pelo influenciador e confirme a aprovação final.</p>
+                </div>
+            </div>
+
+            <!-- Conteúdo: Fluxo Influenciador (Oculto por padrão) -->
+            <div id="fluxo-influenciador" class="grid grid-cols-1 md:grid-cols-4 gap-6 hidden">
+                <div class="bg-black/80 border border-zinc-800 p-6 rounded-2xl relative">
+                    <span class="text-red-500 font-black text-3xl block mb-3">01</span>
+                    <h3 class="font-bold text-white mb-2">Cadastro de Redes</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Cadastre seu perfil, informe suas principais redes sociais e comprove sua audiência.</p>
+                </div>
+                <div class="bg-black/80 border border-zinc-800 p-6 rounded-2xl relative">
+                    <span class="text-red-500 font-black text-3xl block mb-3">02</span>
+                    <h3 class="font-bold text-white mb-2">Análise de Oportunidades</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Visualize propostas e campanhas abertas por empresas parceiras na região.</p>
+                </div>
+                <div class="bg-black/80 border border-zinc-800 p-6 rounded-2xl relative">
+                    <span class="text-red-500 font-black text-3xl block mb-3">03</span>
+                    <h3 class="font-bold text-white mb-2">Execução da Divulgação</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Produza o conteúdo (Stories, vídeos ou posts) seguindo rigorosamente as diretrizes combinadas.</p>
+                </div>
+                <div class="bg-black/80 border border-zinc-800 p-6 rounded-2xl relative">
+                    <span class="text-red-500 font-black text-3xl block mb-3">04</span>
+                    <h3 class="font-bold text-white mb-2">Envio e Recebimento</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Envie o link/captura de comprovação e acompanhe a liberação do seu pagamento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Sistema de Pagamento e Taxas (Fluxo Visual) -->
+    <section class="py-20 max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-extrabold text-white">Transparência Financeira e Taxas</h2>
+            <p class="text-gray-400 text-sm mt-2 max-w-xl mx-auto">Nossa intermediação garante segurança para ambas as partes através de um fluxo estruturado.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div class="bg-zinc-900/90 border border-zinc-800 p-5 rounded-2xl text-center">
+                <div class="text-red-500 font-bold mb-2">Passo 1</div>
+                <p class="text-xs text-gray-300">Empresa confirma o pedido e escolhe o serviço.</p>
+            </div>
+            <div class="bg-zinc-900/90 border border-zinc-800 p-5 rounded-2xl text-center">
+                <div class="text-red-500 font-bold mb-2">Passo 2</div>
+                <p class="text-xs text-gray-300">Valor acordado é depositado na plataforma.</p>
+            </div>
+            <div class="bg-zinc-900/90 border border-zinc-800 p-5 rounded-2xl text-center">
+                <div class="text-red-500 font-bold mb-2">Passo 3</div>
+                <p class="text-xs text-gray-300">Fundos ficam reservados durante a execução.</p>
+            </div>
+            <div class="bg-zinc-900/90 border border-zinc-800 p-5 rounded-2xl text-center">
+                <div class="text-red-500 font-bold mb-2">Passo 4</div>
+                <p class="text-xs text-gray-300">Criador executa a publi e envia a evidência.</p>
+            </div>
+            <div class="bg-zinc-900/90 border border-zinc-800 p-5 rounded-2xl text-center">
+                <div class="text-red-500 font-bold mb-2">Passo 5</div>
+                <p class="text-xs text-gray-300">Empresa valida e aprova a entrega do serviço.</p>
+            </div>
+            <div class="bg-zinc-900/90 border border-zinc-800 p-5 rounded-2xl text-center bg-red-950/20 border-red-900/50">
+                <div class="text-red-500 font-bold mb-2">Passo 6</div>
+                <p class="text-xs text-gray-300">Pagamento liberado (descontada pequena taxa fixa).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Resolução de Problemas e Divergências -->
+    <section class="py-16 bg-zinc-950/80 border-t border-red-900/20">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-2xl font-extrabold text-white text-center mb-8">O que acontece se houver divergência?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-black/60 border border-zinc-800 p-6 rounded-2xl">
+                    <h3 class="font-bold text-white mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-check text-green-500"></i> Entrega Aprovada
+                    </h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Caso a empresa confirme que tudo ocorreu conforme o combinado, o pedido é concluído e o valor é repassado ao criador.</p>
+                </div>
+                <div class="bg-black/60 border border-zinc-800 p-6 rounded-2xl">
+                    <h3 class="font-bold text-white mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-yellow-500"></i> Divergência de Entrega
+                    </h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Se a empresa não confirmar, o influenciador pode solicitar análise anexando provas. Nossa equipe audita os prazos e histórico para uma decisão justa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Perguntas Frequentes (FAQ Expansível) -->
+    <section class="py-20 max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold text-white text-center mb-12">Perguntas Frequentes</h2>
+        
+        <div class="space-y-4">
+            <details class="bg-zinc-900/90 border border-zinc-800 p-6 rounded-2xl cursor-pointer group">
+                <summary class="font-bold text-white flex justify-between items-center text-sm">
+                    Como a plataforma cobra pelo serviço?
+                    <i class="fa-solid fa-chevron-down text-red-500 group-open:rotate-180 transition"></i>
+                </summary>
+                <p class="text-gray-400 text-xs mt-4 leading-relaxed">
+                    Cobramos apenas uma taxa fixa transparente por pedido concluído, informada diretamente antes de você confirmar a transação.
+                </p>
+            </details>
+
+            <details class="bg-zinc-900/90 border border-zinc-800 p-6 rounded-2xl cursor-pointer group">
+                <summary class="font-bold text-white flex justify-between items-center text-sm">
+                    Qualquer empresa pode se cadastrar?
+                    <i class="fa-solid fa-chevron-down text-red-500 group-open:rotate-180 transition"></i>
+                </summary>
+                <p class="text-gray-400 text-xs mt-4 leading-relaxed">
+                    Sim! Pequenos empreendedores, prestadores de serviços e empresas locais da Paraíba podem criar sua conta e iniciar campanhas imediatamente.
+                </p>
+            </details>
+
+            <details class="bg-zinc-900/90 border border-zinc-800 p-6 rounded-2xl cursor-pointer group">
+                <summary class="font-bold text-white flex justify-between items-center text-sm">
+                    Como o influenciador recebe o pagamento?
+                    <p class="text-gray-400 text-xs mt-4 leading-relaxed">
+                        Após a validação e confirmação da publicação pela empresa, o saldo retido é liberado com desconto da taxa de intermediação diretamente para o criador.
+                    </p>
+                </summary>
+            </details>
+        </div>
+    </section>
+
+    <!-- 7. Chamada Final -->
+    <section class="py-20 text-center bg-gradient-to-t from-red-950/30 to-transparent border-t border-red-900/20">
+        <div class="max-w-3xl mx-auto px-6">
+            <h2 class="text-3xl font-extrabold text-white mb-4">Pronto para começar?</h2>
+            <p class="text-gray-400 text-sm mb-8">Faça parte do ecossistema que mais cresce na Paraíba.</p>
+            <div class="flex justify-center gap-4">
+                <a href="/empresa" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition">
+                    Cadastrar Empresa
+                </a>
+                <a href="/influencer/dashboard" class="bg-zinc-900 border border-zinc-700 hover:border-red-600 text-white font-bold py-3 px-8 rounded-xl transition">
+                    Cadastrar Influenciador
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-black py-8 border-t border-red-900/30 text-center text-xs text-gray-500">
+        <p>© 2026 Meu Influencer PB - Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Script Simples para Alternar os Perfis nas Abas -->
+    <script>
+        function mudarPerfil(perfil) {
+            const btnEmpresa = document.getElementById('btn-empresa');
+            const btnInfluenciador = document.getElementById('btn-influenciador');
+            const fluxoEmpresa = document.getElementById('fluxo-empresa');
+            const fluxoInfluenciador = document.getElementById('fluxo-influenciador');
+
+            if (perfil === 'empresa') {
+                btnEmpresa.className = "px-6 py-3 rounded-xl font-bold text-sm bg-red-600 text-white shadow-lg transition";
+                btnInfluenciador.className = "px-6 py-3 rounded-xl font-bold text-sm bg-zinc-900 text-gray-400 border border-zinc-800 transition";
+                fluxoEmpresa.classList.remove('hidden');
+                fluxoInfluenciador.classList.add('hidden');
+            } else {
+                btnInfluenciador.className = "px-6 py-3 rounded-xl font-bold text-sm bg-red-600 text-white shadow-lg transition";
+                btnEmpresa.className = "px-6 py-3 rounded-xl font-bold text-sm bg-zinc-900 text-gray-400 border border-zinc-800 transition";
+                fluxoInfluenciador.classList.remove('hidden');
+                fluxoEmpresa.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Influencer - Conectando Marcas e Criadores da Paraíba</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Efeito de Wallpaper Animado de Fundo */
+        .animated-wallpaper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: #050505;
+            overflow: hidden;
+        }
+
+        .wallpaper-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            animation: moveGlow 15s infinite alternate ease-in-out;
+        }
+
+        .wallpaper-glow:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(139, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+            animation: moveGlow2 20s infinite alternate ease-in-out;
+            right: 0;
+            bottom: 0;
+        }
+
+        @keyframes moveGlow {
+            0% { transform: translate(-10%, -10%) scale(1); }
+            50% { transform: translate(40vw, 30vh) scale(1.2); }
+            100% { transform: translate(10vw, 60vh) scale(0.9); }
+        }
+
+        @keyframes moveGlow2 {
+            0% { transform: translate(10%, 10%) scale(1); }
+            50% { transform: translate(-30vw, -40vh) scale(1.3); }
+            100% { transform: translate(-10vw, -20vh) scale(1); }
+        }
+
+        /* Padronização de gradiente de texto */
+        .text-gradient-pb {
+            background: linear-gradient(135deg, #ffffff 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-100 font-sans antialiased selection:bg-red-600 selection:text-white flex flex-col min-h-screen relative">
+
+    <!-- Fundo Animado Interativo (Wallpaper) -->
+    <div class="animated-wallpaper">
+        <div class="wallpaper-glow"></div>
+        <div class="wallpaper-glow"></div>
+        <!-- Grid texturizado sutil por cima -->
+        <div class="absolute inset-0 bg-[radial-gradient(#dc2626_0.75px,transparent_0.75px)] [background-size:32px_32px] opacity-10"></div>
+    </div>
+
+    <!-- Cabeçalho / Navbar -->
+    <header class="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-red-900/40">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            
+            <a href="/" class="flex items-center gap-3 group">
+                <!-- Bandeira Oficial da Paraíba otimizada -->
+                <div class="w-12 h-8 rounded-lg overflow-hidden border border-red-900/60 shadow-md group-hover:scale-105 transition flex-shrink-0 bg-red-600">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Bandeira_da_Para%C3%ADba.svg" 
+                        alt="Bandeira da Paraíba" 
+                        class="w-full h-full object-cover">
+                </div>
+                <span class="text-2xl font-black tracking-tight text-white">
+                    MEU<span class="text-red-600">INFLUENCER</span>
+                </span>
+            </a>
+
+            <!-- Menu de Navegação -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300">
+                <a href="#sobre" class="hover:text-red-500 transition">Sobre o Projeto</a>
+                <a href="/como-funciona" class="hover:text-red-500 transition">Como Funciona</a>
+            </nav>
+
+            <!-- Botões de Ação Direta no Topo -->
+            <div class="flex items-center gap-3">
+                <a href="/empresa" class="text-xs sm:text-sm font-bold text-gray-300 hover:text-white px-4 py-2 rounded-xl border border-red-900/50 hover:bg-red-950/40 transition">
+                    Área Empresa
+                </a>
+                <a href="/influencer/dashboard" class="text-xs sm:text-sm font-bold bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl shadow-lg shadow-red-600/30 transition">
+                    Área Criador
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Principal (Hero Section) -->
+    <section class="relative py-20 lg:py-28 overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
+            
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-950/80 border border-red-600/50 text-red-400 text-xs font-extrabold uppercase tracking-widest mb-6 shadow-lg shadow-red-950">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Bandeira_da_Para%C3%ADba.svg" 
+                    alt="PB" class="w-5 h-3.5 object-cover rounded-xs"> 
+                Orgulhosamente da Paraíba
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6 uppercase text-white leading-tight">
+                Potencialize sua marca com <br class="hidden sm:block"/>
+                <span class="text-gradient-pb">Marketing de Influência Local</span>
+            </h1>
+
+            <p class="max-w-3xl mx-auto text-gray-400 text-base sm:text-lg mb-10 leading-relaxed">
+                Conectamos as maiores marcas e empresas da Paraíba aos criadores de conteúdo que realmente possuem engajamento, autenticidade e conexão com o público paraibano.
+            </p>
+
+            <!-- Caixas / Botões de Direcionamento Principal -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto text-left">
+                
+                <!-- Área da Empresa -->
+                <div class="bg-zinc-900/90 backdrop-blur-md border border-red-900/40 p-8 rounded-3xl hover:border-red-600/80 transition duration-300 shadow-2xl relative group">
+                    <div class="w-12 h-12 rounded-2xl bg-red-600/10 text-red-500 flex items-center justify-center font-bold text-lg mb-4 group-hover:bg-red-600 group-hover:text-white transition">
+                        EMP
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Para Empresas</h3>
+                    <p class="text-gray-400 text-sm mb-6">Encontre influencers alinhados à sua marca e contrate campanhas de publicidade de forma simplificada.</p>
+                    <a href="/empresa" class="inline-flex items-center justify-center w-full py-3 px-6 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-sm transition shadow-lg shadow-red-600/20 gap-2">
+                        Cadastrar Empresa <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Área do Influenciador -->
+                <div class="bg-zinc-900/90 backdrop-blur-md border border-zinc-800 p-8 rounded-3xl hover:border-red-600/80 transition duration-300 shadow-2xl relative group">
+                    <div class="w-12 h-12 rounded-2xl bg-red-600/10 text-red-500 flex items-center justify-center font-bold text-lg mb-4 group-hover:bg-red-600 group-hover:text-white transition">
+                         CRI
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Para Criadores</h3>
+                    <p class="text-gray-400 text-sm mb-6">Monetize seus seguidores, cadastre suas redes sociais e receba propostas de publis regionais.</p>
+                    <a href="/influencer/dashboard" class="inline-flex items-center justify-center w-full py-3 px-6 rounded-xl bg-zinc-800 hover:bg-red-600 text-white font-bold text-sm transition gap-2">
+                        Cadastrar como Influenciador <i class="fa-solid fa-user-plus"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Sobre o Nosso Projeto -->
+    <section id="sobre" class="py-20 bg-zinc-950/80 backdrop-blur-md border-t border-red-900/20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-xs font-extrabold text-red-500 tracking-widest uppercase mb-2">Nosso Foco Principal</h2>
+                <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Influência sobre medida para o ecossistema paraibano</h3>
+                <p class="text-gray-400 mt-3 max-w-2xl mx-auto text-sm">
+                    Eliminamos intermediários e burocracias. Construímos uma ponte sólida entre marcas locais que buscam visibilidade e criadores prontos para impactar.
+                </p>
+            </div>
+
+            <!-- Cards de Funcionalidades -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="bg-black/60 border border-zinc-800 p-6 rounded-2xl hover:border-red-600/50 transition">
+                    <div class="text-red-500 text-2xl font-black mb-4">01</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Gestão de Campanhas</h4>
+                    <p class="text-gray-400 text-xs leading-relaxed">Acompanhe métricas, orçamentos e alcance das suas divulgações em tempo real.</p>
+                </div>
+
+                <div class="bg-black/60 border border-zinc-800 p-6 rounded-2xl hover:border-red-600/50 transition">
+                    <div class="text-red-500 text-2xl font-black mb-4">02</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Vitrine de Influencers</h4>
+                    <p class="text-gray-400 text-xs leading-relaxed">Filtre perfis por nicho, quantidade de seguidores e engajamento genuíno na Paraíba.</p>
+                </div>
+
+                <div class="bg-black/60 border border-zinc-800 p-6 rounded-2xl hover:border-red-600/50 transition">
+                    <div class="text-red-500 text-2xl font-black mb-4">03</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Campanhas UGC</h4>
+                    <p class="text-gray-400 text-xs leading-relaxed">Conteúdos autênticos gerados diretamente pelos criadores para maior conversão.</p>
+                </div>
+
+                <div class="bg-black/60 border border-zinc-800 p-6 rounded-2xl hover:border-red-600/50 transition">
+                    <div class="text-red-500 text-2xl font-black mb-4">04</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Envio de Press Kit</h4>
+                    <p class="text-gray-400 text-xs leading-relaxed">Facilidade na contratação e envio de amostras para unboxing dos criadores.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-black/90 py-8 border-t border-red-900/30 text-center text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>© 2026 Meu Influencer PB - Conectando marcas e criadores paraibanos.</p>
+            <div class="flex gap-4 text-gray-400">
+                <a href="/adm/categorias/nova" class="hover:text-red-500 transition">Área do Administrador</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

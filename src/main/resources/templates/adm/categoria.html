@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Categorias - Painel Admin</title>
+    <!-- Tailwind CSS CDN para um design moderno e responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Cabeçalho -->
+    <header class="bg-white shadow-sm border-b border-gray-100">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-purple-600 text-white p-2.5 rounded-xl shadow-md">
+                    <i class="fa-solid fa-tags text-lg"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-900">Painel Administrativo</h1>
+            </div>
+            <a href="/influencer/dashboard" class="text-sm font-medium text-purple-600 hover:text-purple-700 transition flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Voltar ao Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-md mx-auto px-6 py-12 w-full flex-grow flex items-center">
+        <div class="bg-white w-full rounded-2xl shadow-xl border border-gray-100 p-8">
+            
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">Cadastrar Nova Categoria</h2>
+                <p class="text-sm text-gray-500 mt-1">Adicione um novo nicho para segmentar influenciadores e empresas.</p>
+            </div>
+
+            <!-- Formulário que envia os dados para o seu AdmControllers -->
+            <form th:action="@{/adm/adicionarCategoria}" method="POST" class="space-y-6">                
+                <div>
+                    <label for="nome" class="block text-sm font-semibold text-gray-700 mb-2">Nome da Categoria / Nicho</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                            <i class="fa-solid fa-tag"></i>
+                        </span>
+                        <input type="text" id="nome" name="nome" required 
+                            placeholder="Ex: Tecnologia, Moda, Fitness..." 
+                            class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition text-sm">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-purple-200 transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Salvar Categoria
+                </button>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="text-center py-6 text-xs text-gray-400 border-t border-gray-100 bg-white">
+        &copy; 2026 Sistema de Gerenciamento de Influenciadores. Todos os direitos reservados.
+    </footer>
+
+</body>
+</html>

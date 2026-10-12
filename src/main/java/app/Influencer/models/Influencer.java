@@ -1,6 +1,7 @@
 package app.Influencer.models;
 
-import app.RedeSocial;
+import app.Adm.models.Categoria;
+
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -17,16 +18,23 @@ public class Influencer {
     @JoinColumn(name = "influencer_id")
     private List<RedeSocial> redesSociais = new ArrayList<>();
 
-    public Influencer(Influencer influencer){
+    @ManyToMany
+    @JoinTable(
+        name = "influencer_categoria",
+        joinColumns = @JoinColumn(name = "influencer_id"),
+        inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private List<Categoria> categorias = new ArrayList<>();
+
+   public Influencer(Influencer influencer){
         this.id = influencer.getId();
         this.nome = influencer.getNome();
-        this.redesSociais = influencer.redesSociais;
-        this.seguidores = influencer.getSeguidores()    ;
+        this.redesSociais = new ArrayList<>(influencer.redesSociais); // Boa prática para clonar a lista
+        this.seguidores = influencer.getSeguidores();
+        this.categorias = new ArrayList<>(influencer.categorias);     // Boa prática para clonar a lista
     }
 
-    public Influencer() {
-
-    }
+    public Influencer() {}
 
     public List<RedeSocial> cadastrarRedeSocial(String nome, int quantidadeDeSeguidores, String linkDoPerfil ) {
         RedeSocial redeSocialNova = new RedeSocial(nome, quantidadeDeSeguidores, linkDoPerfil);
@@ -41,6 +49,7 @@ public class Influencer {
                 .sum();
     }
 
+    
     public Integer getId() {
         return id;
     }
@@ -71,5 +80,13 @@ public class Influencer {
 
     public void setRedesSociais(List<RedeSocial> redesSociais) {
         this.redesSociais = redesSociais;
+    }
+
+    public List<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
     }
 }

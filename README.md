@@ -4,7 +4,7 @@ Plataforma de conexão entre pequenas empresas e criadores de conteúdo da Para�
 
 ## 📸 Prévia do Sistema
 
-![Tela do Sistema](./captura-de-tela.png)
+![Tela do Sistema](./Captura de Tela (6).png)
 
 Sistema web desenvolvido para o gerenciamento de influenciadores digitais, empresas e suas respectivas redes sociais e nichos de mercado.
 

@@ -1,5 +1,6 @@
 package app.Empresa.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,14 +9,21 @@ import jakarta.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import org.springframework.lang.NonNull;
+
 @Entity
 public class Empresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
     private String nome;
+    
     private String cnpj;
+    
+    @Column(name = "valor_da_publi", nullable = false)
     private BigDecimal saldo;
+    
     private String email;
 
     public Empresa() {}
@@ -25,6 +33,14 @@ public class Empresa {
         this.cnpj = cnpj;
         this.saldo = saldo;
         this.email = email;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -43,6 +59,7 @@ public class Empresa {
         this.cnpj = cnpj;
     }
 
+    // Mantendo os métodos que o seu código já usa
     public BigDecimal getValorDaPubli() {
         return saldo;
     }
@@ -58,7 +75,6 @@ public class Empresa {
     public void setEmail(String email) {
         this.email = email;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

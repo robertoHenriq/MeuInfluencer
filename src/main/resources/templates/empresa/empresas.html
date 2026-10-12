@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Empresas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- Container Principal -->
+    <main class="max-w-7xl mx-auto px-4 py-10 w-full flex-grow">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-gray-800 tracking-tight">Painel de <span class="text-indigo-600">Empresas</span></h1>
+            <p class="text-gray-500 mt-2">Gerencie os parceiros, CNPJs e valores de publicidade cadastrados.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Formulário de Novo Cadastro -->
+            <div class="lg:col-span-1">
+                <div class="glass rounded-3xl p-8 shadow-2xl border border-white/20">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800 flex items-center gap-2">
+                        <i class="fa-solid fa-building text-indigo-600"></i> Nova Empresa
+                    </h2>
+                    
+                    <form th:action="@{/empresa/adicionar}" th:object="${empresa}" method="POST" class="space-y-4">
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Nome da Empresa</label>
+                            <input type="text" th:field="*{nome}" placeholder="Ex: Tech Solutions Ltda" required
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">CNPJ</label>
+                            <input type="text" th:field="*{cnpj}" placeholder="Ex: 00.000.000/0001-00" required
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Valor da Publi (Saldo)</label>
+                            <input type="number" step="0.01" th:field="*{valorDaPubli}" placeholder="Ex: 1500.00" min="0" required
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">E-mail de Contato</label>
+                            <input type="email" th:field="*{email}" placeholder="contato@empresa.com" required
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm">
+                        </div>
+
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-200 transform hover:-translate-y-0.5 transition duration-200 flex items-center justify-center gap-2">
+                            <i class="fas fa-rocket"></i> Cadastrar Empresa
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tabela de Empresas Cadastradas -->
+            <div class="lg:col-span-2">
+                <div class="glass rounded-3xl shadow-2xl overflow-hidden border border-white/20">
+                    <div class="p-6 bg-white/50 border-b border-gray-100 flex justify-between items-center">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                            <i class="fa-solid fa-briefcase text-indigo-600"></i> Empresas Parceiras
+                        </h2>
+                        <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full"
+                              th:text="${#lists.size(empresas)} + ' CADASTRADAS'">0 CADASTRADAS</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50/50 text-gray-500 text-xs uppercase tracking-wider">
+                                <tr>
+                                    <th class="px-6 py-4">Empresa / E-mail</th>
+                                    <th class="px-6 py-4">CNPJ</th>
+                                    <th class="px-6 py-4 text-center">Valor da Publi</th>
+                                    <th class="px-6 py-4 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 text-sm">
+                                <tr th:each="emp : ${empresas}" class="hover:bg-white/40 transition">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <div class="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-400 to-purple-400 flex items-center justify-center text-white font-bold mr-3 shadow-md flex-shrink-0">
+                                                <span th:text="${#strings.substring(emp.nome,0,1)}">E</span>
+                                            </div>
+                                            <div>
+                                                <span class="font-semibold text-gray-800 block" th:text="${emp.nome}">Nome</span>
+                                                <span class="text-xs text-gray-400" th:text="${emp.email}">email@teste.com</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600 font-mono text-xs" th:text="${emp.cnpj}">00.000.000/0001-00</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="px-3 py-1 rounded-lg bg-green-100 text-green-700 font-bold text-xs"
+                                              th:text="'R$ ' + ${#numbers.formatDecimal(emp.valorDaPubli, 1, 'COMMA', 2, 'POINT')}">R$ 0,00</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <a th:href="@{/empresa/deletar/{id}(id=${emp.id})}" class="text-red-400 hover:text-red-600 transition p-2" title="Excluir Empresa">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(empresas)}">
+                                    <td colspan="4" class="px-6 py-10 text-center text-gray-400 italic">
+                                        Nenhuma empresa cadastrada. Comece preenchendo o formulário ao lado!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="text-center py-6 text-xs text-gray-400 border-t border-gray-100 bg-white/50">
+        © 2026 Sistema de Gerenciamento. Todos os direitos reservados.
+    </footer>
+
+</body>
+</html>

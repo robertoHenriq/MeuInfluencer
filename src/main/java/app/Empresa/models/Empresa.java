@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,6 +24,7 @@ public class Empresa {
     private BigDecimal saldo;
     
     private String email;
+    
     @ManyToMany
     @JoinTable(
         name = "empresa_categoria",
@@ -32,25 +32,21 @@ public class Empresa {
         inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
     private List<Categoria> categorias = new ArrayList<>();
-
-    private RedeSocial redeSocial;
-
-    public RedeSocial getRedeSocial() {
-        return redeSocial;
-    }
-
-    public void setRedeSocial(RedeSocial redeSocial) {
-        this.redeSocial = redeSocial;
-    }
+    
+    // CORRIGIDO: Alterado para List no plural para funcionar com @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "empresa_id")
+    private List<RedeSocial> redesSociais = new ArrayList<>();
 
     public Empresa() {}
 
-    public Empresa(String nome, String cnpj, BigDecimal saldo, String email, List<Categoria> categorias) {
+    public Empresa(String nome, String cnpj, BigDecimal saldo, String email, List<Categoria> categorias, List<RedeSocial> redesSociais) {
         this.nome = nome;
         this.cnpj = cnpj;
         this.saldo = saldo;
         this.email = email;
         this.categorias = new ArrayList<>(categorias); 
+        this.redesSociais = new ArrayList<>(redesSociais);
     }
 
     public Integer getId() {
@@ -81,10 +77,10 @@ public class Empresa {
         return saldo;
     }
 
-    // Setter deve receber BigDecimal
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
+
     public String getEmail() {
         return email;
     }
@@ -96,8 +92,17 @@ public class Empresa {
     public List<Categoria> getCategorias() { 
         return categorias; 
     }
+    
     public void setCategorias(List<Categoria> categorias) { 
         this.categorias = categorias; 
+    }
+
+    public List<RedeSocial> getRedesSociais() {
+        return redesSociais;
+    }
+
+    public void setRedesSociais(List<RedeSocial> redesSociais) {
+        this.redesSociais = redesSociais;
     }
 
     @Override
@@ -105,24 +110,14 @@ public class Empresa {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Empresa empresa = (Empresa) o;
-        
-        // Compara o CNPJ (identificador único)
-        if (cnpj != empresa.cnpj) return false;
-        
-        // Compara o nome
-        if (!Objects.equals(nome, empresa.nome)) return false;
-        
-        // Compara o BigDecimal usando compareTo para ignorar diferenças de escala (ex: 10.0 vs 10.00)
-        if (saldo == null && empresa.saldo == null) return true;
-        if (saldo == null || empresa.saldo == null) return false;
-        if (redeSocial == null && empresa.redeSocial == null) return true;
-        if (redeSocial == null || empresa.redeSocial == null) return false;
-        return saldo.compareTo(empresa.saldo) == 0;
+        return Objects.equals(cnpj, empresa.cnpj) && 
+               Objects.equals(nome, empresa.nome) && 
+               Objects.equals(email, empresa.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nome, cnpj, saldo, email, redeSocial);
+        return Objects.hash(nome, cnpj, email);
     }
 
     @Override

@@ -21,47 +21,85 @@
     <main class="max-w-7xl mx-auto px-4 py-10 w-full flex-grow">
         <div class="text-center mb-10">
             <h1 class="text-4xl font-extrabold text-gray-800 tracking-tight">Painel de <span class="text-indigo-600">Empresas</span></h1>
-            <p class="text-gray-500 mt-2">Gerencie os parceiros, CNPJs e valores de publicidade cadastrados.</p>
+            <p class="text-gray-500 mt-2">Gerencie os parceiros, CNPJs, redes sociais e valores de publicidade cadastrados.</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             <!-- Formulário de Novo Cadastro -->
             <div class="lg:col-span-1">
-                <div class="glass rounded-3xl p-8 shadow-2xl border border-white/20">
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-800 flex items-center gap-2">
-                        <i class="fa-solid fa-building text-indigo-600"></i> Nova Empresa
-                    </h2>
-                    
+                <div class="glass rounded-3xl p-6 shadow-2xl border border-white/20">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-building text-indigo-600"></i> Cadastrar Nova Empresa
+                        </h2>
+                        <p class="text-gray-500 text-xs">Preencha os dados corporativos e as redes sociais.</p>
+                    </div>
+
+                    <!-- Formulário apontando para o endpoint POST do Controller -->
                     <form th:action="@{/empresa/adicionar}" th:object="${empresa}" method="POST" class="space-y-4">
                         
+                        <!-- Campo Nome -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">Nome da Empresa</label>
-                            <input type="text" th:field="*{nome}" placeholder="Ex: Tech Solutions Ltda" required
-                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm">
+                            <label for="nome" class="block text-xs font-semibold text-gray-700 mb-1">Nome da Empresa</label>
+                            <input type="text" id="nome" th:field="*{nome}" required 
+                                placeholder="Ex: Loja Paraibana de Calçados" 
+                                class="w-full px-4 py-2.5 rounded-xl bg-white border border-gray-300 text-gray-800 focus:ring-2 focus:ring-indigo-600 focus:border-transparent outline-none transition text-sm">
                         </div>
 
+                        <!-- Campo CNPJ -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">CNPJ</label>
-                            <input type="text" th:field="*{cnpj}" placeholder="Ex: 00.000.000/0001-00" required
-                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm">
+                            <label for="cnpj" class="block text-xs font-semibold text-gray-700 mb-1">CNPJ</label>
+                            <input type="text" id="cnpj" th:field="*{cnpj}" required 
+                                placeholder="00.000.000/0001-00" 
+                                class="w-full px-4 py-2.5 rounded-xl bg-white border border-gray-300 text-gray-800 focus:ring-2 focus:ring-indigo-600 focus:border-transparent outline-none transition text-sm">
                         </div>
 
+                        <!-- Campo E-mail -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">Valor da Publi (Saldo)</label>
-                            <input type="number" step="0.01" th:field="*{valorDaPubli}" placeholder="Ex: 1500.00" min="0" required
-                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm">
+                            <label for="email" class="block text-xs font-semibold text-gray-700 mb-1">E-mail Corporativo</label>
+                            <input type="email" id="email" th:field="*{email}" required 
+                                placeholder="contato@suaempresa.com" 
+                                class="w-full px-4 py-2.5 rounded-xl bg-white border border-gray-300 text-gray-800 focus:ring-2 focus:ring-indigo-600 focus:border-transparent outline-none transition text-sm">
                         </div>
 
+                        <!-- Campo Saldo Inicial -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">E-mail de Contato</label>
-                            <input type="email" th:field="*{email}" placeholder="contato@empresa.com" required
-                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm">
+                            <label for="saldo" class="block text-xs font-semibold text-gray-700 mb-1">Saldo Inicial (R$)</label>
+                            <input type="number" step="0.01" id="saldo" th:field="*{saldo}" required 
+                                placeholder="0.00" 
+                                class="w-full px-4 py-2.5 rounded-xl bg-white border border-gray-300 text-gray-800 focus:ring-2 focus:ring-indigo-600 focus:border-transparent outline-none transition text-sm">
                         </div>
 
-                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-200 transform hover:-translate-y-0.5 transition duration-200 flex items-center justify-center gap-2">
-                            <i class="fas fa-rocket"></i> Cadastrar Empresa
+                        <!-- Seletor de Categoria/Nicho -->
+                        <div>
+                            <label for="categoria" class="block text-xs font-semibold text-gray-700 mb-1">Categoria / Nicho de Atuação</label>
+                            <select id="categoria" name="categoriaId" required
+                                class="w-full px-4 py-2.5 rounded-xl bg-white border border-gray-300 text-gray-800 focus:ring-2 focus:ring-indigo-600 focus:border-transparent outline-none transition text-sm">
+                                <option value="" disabled selected>Selecione um nicho...</option>
+                                <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nome}"></option>
+                            </select>
+                        </div>
+
+                        <!-- Seção de Redes Sociais Dinâmicas -->
+                        <div class="border-t border-gray-200 pt-4 mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-semibold text-gray-700">Redes Sociais</label>
+                                <button type="button" onclick="adicionarRedeSocial()" class="text-xs bg-indigo-50 text-indigo-600 hover:bg-indigo-100 font-bold px-2.5 py-1 rounded-lg transition">
+                                    <i class="fa-solid fa-plus"></i> Adicionar Rede
+                                </button>
+                            </div>
+                            
+                            <div id="redes-sociais-container" class="space-y-3">
+                                <!-- Os inputs dinâmicos entram aqui via JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Botão de Envio -->
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200 flex items-center justify-center gap-2 text-sm mt-6">
+                            <i class="fa-solid fa-plus"></i> Salvar e Cadastrar Empresa
                         </button>
+
                     </form>
                 </div>
             </div>
@@ -83,6 +121,7 @@
                                 <tr>
                                     <th class="px-6 py-4">Empresa / E-mail</th>
                                     <th class="px-6 py-4">CNPJ</th>
+                                    <th class="px-6 py-4">Redes Sociais</th>
                                     <th class="px-6 py-4 text-center">Valor da Publi</th>
                                     <th class="px-6 py-4 text-right">Ações</th>
                                 </tr>
@@ -101,9 +140,20 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-gray-600 font-mono text-xs" th:text="${emp.cnpj}">00.000.000/0001-00</td>
+                                    
+                                    <!-- Exibição das Redes Sociais na Tabela -->
+                                    <td class="px-6 py-4 text-xs text-gray-600">
+                                        <div class="flex flex-wrap gap-1">
+                                            <span th:each="rede : ${emp.redesSociais}" class="bg-gray-100 border border-gray-200 px-2 py-0.5 rounded-md">
+                                                <strong th:text="${rede.nome}">Rede</strong>: 
+                                                <a th:href="${rede.linkDoPerfil}" target="_blank" class="text-indigo-600 hover:underline" th:text="${rede.linkDoPerfil}">Link</a>
+                                            </span>
+                                        </div>
+                                    </td>
+
                                     <td class="px-6 py-4 text-center">
                                         <span class="px-3 py-1 rounded-lg bg-green-100 text-green-700 font-bold text-xs"
-                                              th:text="'R$ ' + ${#numbers.formatDecimal(emp.valorDaPubli, 1, 'COMMA', 2, 'POINT')}">R$ 0,00</span>
+                                              th:text="'R$ ' + ${emp.saldo}">R$ 0,00</span>
                                     </td>
                                     <td class="px-6 py-4 text-right">
                                         <a th:href="@{/empresa/deletar/{id}(id=${emp.id})}" class="text-red-400 hover:text-red-600 transition p-2" title="Excluir Empresa">
@@ -112,7 +162,7 @@
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(empresas)}">
-                                    <td colspan="4" class="px-6 py-10 text-center text-gray-400 italic">
+                                    <td colspan="5" class="px-6 py-10 text-center text-gray-400 italic">
                                         Nenhuma empresa cadastrada. Comece preenchendo o formulário ao lado!
                                     </td>
                                 </tr>
@@ -125,9 +175,30 @@
         </div>
     </main>
 
+    <!-- Script para gerenciar a adição dinâmica de campos de redes sociais -->
+    <script>
+        let indexRede = 0;
+        function adicionarRedeSocial() {
+            const container = document.getElementById('redes-sociais-container');
+            const html = `
+                <div class="flex gap-2 items-center bg-gray-50 p-2.5 rounded-xl border border-gray-200">
+                    <input type="text" name="redesSociais[${indexRede}].nome" placeholder="Plataforma (ex: Instagram)" required 
+                        class="w-1/3 px-3 py-1.5 rounded-lg bg-white border border-gray-300 text-xs text-gray-800 outline-none focus:ring-1 focus:ring-indigo-600">
+                    <input type="url" name="redesSociais[${indexRede}].linkDoPerfil" placeholder="Link do perfil (https://...)" required 
+                        class="w-2/3 px-3 py-1.5 rounded-lg bg-white border border-gray-300 text-xs text-gray-800 outline-none focus:ring-1 focus:ring-indigo-600">
+                    <button type="button" onclick="this.parentElement.remove()" class="text-red-500 hover:text-red-700 px-2 text-xs">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            indexRede++;
+        }
+    </script>
+
     <!-- Rodapé -->
     <footer class="text-center py-6 text-xs text-gray-400 border-t border-gray-100 bg-white/50">
-        © 2026 Sistema de Gerenciamento. Todos os direitos reservados.
+        <p>© 2026 Sistema de Gerenciamento. Todos os direitos reservados.</p>
     </footer>
 
 </body>

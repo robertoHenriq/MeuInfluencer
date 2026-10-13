@@ -14,10 +14,9 @@ public class Influencer {
     private Integer id;
     private String nome;
     private int seguidores;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "influencer_id")
     private List<RedeSocial> redesSociais = new ArrayList<>();
-
     @ManyToMany
     @JoinTable(
         name = "influencer_categoria",
@@ -25,6 +24,7 @@ public class Influencer {
         inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
     private List<Categoria> categorias = new ArrayList<>();
+    private String email;
 
    public Influencer(Influencer influencer){
         this.id = influencer.getId();
@@ -66,9 +66,21 @@ public class Influencer {
         this.nome = nome;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public int getSeguidores() {
         return seguidores;
     }
+
+    public int getTotalSeguidores() {
+    return seguidores;
+}
 
     public void setSeguidores(int seguidores) {
         this.seguidores = seguidores;

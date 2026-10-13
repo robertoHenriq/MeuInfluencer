@@ -1,15 +1,15 @@
 package app.Empresa.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-import org.springframework.lang.NonNull;
+import app.Adm.models.Categoria;
+import app.Influencer.models.RedeSocial;
 
 @Entity
 public class Empresa {
@@ -25,14 +25,32 @@ public class Empresa {
     private BigDecimal saldo;
     
     private String email;
+    @ManyToMany
+    @JoinTable(
+        name = "empresa_categoria",
+        joinColumns = @JoinColumn(name = "empresa_id"),
+        inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private List<Categoria> categorias = new ArrayList<>();
+
+    private RedeSocial redeSocial;
+
+    public RedeSocial getRedeSocial() {
+        return redeSocial;
+    }
+
+    public void setRedeSocial(RedeSocial redeSocial) {
+        this.redeSocial = redeSocial;
+    }
 
     public Empresa() {}
 
-    public Empresa(String nome, String cnpj, BigDecimal saldo, String email) {
+    public Empresa(String nome, String cnpj, BigDecimal saldo, String email, List<Categoria> categorias) {
         this.nome = nome;
         this.cnpj = cnpj;
         this.saldo = saldo;
         this.email = email;
+        this.categorias = new ArrayList<>(categorias); 
     }
 
     public Integer getId() {
@@ -59,15 +77,14 @@ public class Empresa {
         this.cnpj = cnpj;
     }
 
-    // Mantendo os métodos que o seu código já usa
-    public BigDecimal getValorDaPubli() {
+    public BigDecimal getSaldo() {
         return saldo;
     }
 
-    public void setValorDaPubli(BigDecimal saldo) {
+    // Setter deve receber BigDecimal
+    public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
-
     public String getEmail() {
         return email;
     }
@@ -75,6 +92,14 @@ public class Empresa {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public List<Categoria> getCategorias() { 
+        return categorias; 
+    }
+    public void setCategorias(List<Categoria> categorias) { 
+        this.categorias = categorias; 
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,12 +115,14 @@ public class Empresa {
         // Compara o BigDecimal usando compareTo para ignorar diferenças de escala (ex: 10.0 vs 10.00)
         if (saldo == null && empresa.saldo == null) return true;
         if (saldo == null || empresa.saldo == null) return false;
+        if (redeSocial == null && empresa.redeSocial == null) return true;
+        if (redeSocial == null || empresa.redeSocial == null) return false;
         return saldo.compareTo(empresa.saldo) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nome, cnpj, saldo, email);
+        return Objects.hash(nome, cnpj, saldo, email, redeSocial);
     }
 
     @Override

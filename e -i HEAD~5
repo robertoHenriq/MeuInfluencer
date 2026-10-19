@@ -1,0 +1,32 @@
+[33m4ab9fa3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Remove application.properties do versionamento
+[33m576e6e5[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Atributos de senhas adicionados para fazer a task de login do bakclog
+[33m2584721[m Removido o retorno de todos os dados cadastrados no front do cadastro de empresas e de influencer
+[33mf7b21a6[m adicionado requisitos de inputs para influenciadores e redes sociais para empresas
+[33m5f2e68f[m Foi adicionado html de admin, hiperlink com caminho corrigido para página de admin
+[33m3ce94a0[m Remove application.properties do controle de versão por segurança
+[33m8469926[m Remove application.properties do controle de versão por segurança
+[33mcf170e5[m Remove application.properties do controle de versão por segurança
+[33mf6ba06e[m Update application.properties
+[33m95f7b61[m Rename Captura de Tela (6).png to Captura-de-Tela-(6).png
+[33m892b516[m Fix image filename in README
+[33m0d1f7b7[m Change screenshot in README
+[33md164aa4[m Change system preview image path in README
+[33m9902ee2[m Update screenshot reference in README.md
+[33m0cbab7e[m Update README with project details and technologies
+[33me5cff04[m prototipo do projeto
+[33mbbb62fe[m implementação de página principal do programa
+[33m1a214f0[m refatoração da página de empresa, criação de categorias de influencers separada para administradores
+[33m4757597[m Criado Template de cadastro de empresa, persistencia dos dados das empresas já ocorrendo em nosso docker
+[33m610efed[m Update README.md
+[33m9f25b0c[m refatoração da página de empresa, criação de categorias de influencers a mesma categoria foi separada para adms pois não vai ser algo que os users possam escrever para economizar memoria em banco
+[33m7f96389[m Merge pull request #1 from robertoHenriq/Roberto
+[33m5b23df8[m Influencer está sendo criado e inserido no banco corretamente, o front está listando e cadastrando corretamnete os influencers
+[33m899b84e[m[33m ([m[1;31morigin/desenvolvimento[m[33m, [m[1;31morigin/Teste[m[33m)[m novas depêndencias foram incluidas, não é necessario iniciar o docker para iniciar o banco
+[33m6fba385[m Consertado as rotas e inicialização do spring
+[33mde533a8[m Fix: sincronizando .gitignore e removendo arquivos ignorados do cache
+[33m0da6503[m git
+[33mf3106fc[m[33m ([m[1;31morigin/Gabriel[m[33m)[m Adicionado os packages repositorys e services. Foi implementado o influencerRepository e InfluencerService, com esssas implementações também foi adicionado uma nova rota no controller de produtos
+[33m34f0b15[m Criado a parte de documentação e implementação do SpringBoot
+[33mbdfeb2d[m Add project description for influencer marketing
+[33mb15badc[m First
+[33mfc72283[m Initial commit

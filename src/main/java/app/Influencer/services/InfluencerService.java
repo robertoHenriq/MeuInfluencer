@@ -36,4 +36,6 @@ public class InfluencerService {
         influencerRepository.deleteById(i);
 
     }
+
+    
 }

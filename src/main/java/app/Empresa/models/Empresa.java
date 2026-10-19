@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Objects;
 
 import app.Adm.models.Categoria;
-import app.Influencer.models.RedeSocial;
+import app.Adm.models.RedeSocial;
+import app.Adm.models.TipoUsuario;
 
 @Entity
 public class Empresa {
@@ -24,6 +25,11 @@ public class Empresa {
     private BigDecimal saldo;
     
     private String email;
+
+    private String senha;
+
+    @Column(name = "tipo_usuario", nullable = false, updatable = false)
+    private final TipoUsuario tipo = TipoUsuario.EMPRESA;
     
     @ManyToMany
     @JoinTable(
@@ -40,13 +46,22 @@ public class Empresa {
 
     public Empresa() {}
 
-    public Empresa(String nome, String cnpj, BigDecimal saldo, String email, List<Categoria> categorias, List<RedeSocial> redesSociais) {
+    public Empresa(String nome, String cnpj, BigDecimal saldo, String email, String senha, List<Categoria> categorias, List<RedeSocial> redesSociais) {
         this.nome = nome;
         this.cnpj = cnpj;
         this.saldo = saldo;
         this.email = email;
+        this.senha = senha;
         this.categorias = new ArrayList<>(categorias); 
         this.redesSociais = new ArrayList<>(redesSociais);
+    }
+
+    public TipoUsuario getTipo() {
+        return tipo;
+    }
+
+    public String getSenha() {
+        return senha;
     }
 
     public Integer getId() {

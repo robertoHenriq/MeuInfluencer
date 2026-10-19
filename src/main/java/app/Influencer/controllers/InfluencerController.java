@@ -1,7 +1,7 @@
 package app.Influencer.controllers;
 
 import app.Influencer.models.Influencer;
-import app.Influencer.models.RedeSocial;
+import app.Adm.models.RedeSocial;
 import app.Adm.services.CategoriaService;
 import app.Influencer.services.InfluencerService;
 
@@ -33,7 +33,7 @@ public class InfluencerController {
 
     @PostMapping("/adicionar")
     public String adicionarInfluencer(@ModelAttribute Influencer influencer){
-        influencer.atualizarTotalSeguidores();
+        influencer.setSeguidores();
         influencerService.adicionar(influencer);
         return "redirect:/influencer/dashboard";
     }

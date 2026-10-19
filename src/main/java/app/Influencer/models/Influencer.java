@@ -3,12 +3,16 @@ package app.Influencer.models;
 import app.Adm.models.Categoria;
 
 import jakarta.persistence.*;
+import app.Adm.models.RedeSocial;
+import app.Adm.models.TipoUsuario;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Influencer {
+
+    //Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -25,31 +29,59 @@ public class Influencer {
     )
     private List<Categoria> categorias = new ArrayList<>();
     private String email;
+    private String senha;
+
+    private final TipoUsuario tipo = TipoUsuario.INFLUENCER;
+
+
+    //Constutores
 
    public Influencer(Influencer influencer){
         this.id = influencer.getId();
         this.nome = influencer.getNome();
         this.redesSociais = new ArrayList<>(influencer.redesSociais); // Boa prática para clonar a lista
         this.seguidores = influencer.getSeguidores();
-        this.categorias = new ArrayList<>(influencer.categorias);     // Boa prática para clonar a lista
+        this.categorias = new ArrayList<>(influencer.categorias); 
+        this.email = influencer.getEmail();
     }
 
     public Influencer() {}
 
-    public List<RedeSocial> cadastrarRedeSocial(String nome, int quantidadeDeSeguidores, String linkDoPerfil ) {
+    public Influencer(String nome, int seguidores, List<RedeSocial> redesSociais, List<Categoria> categorias, String email, String senha) {
+        this.nome = nome;
+        this.seguidores = seguidores;
+        this.redesSociais = new ArrayList<>(redesSociais);
+        this.categorias = new ArrayList<>(categorias);     
+        this.email = email;
+        this.senha = senha;
+    }
+
+    //Funções
+
+    public void setRedeSocials(String nome, int quantidadeDeSeguidores, String linkDoPerfil ) {
         RedeSocial redeSocialNova = new RedeSocial(nome, quantidadeDeSeguidores, linkDoPerfil);
         this.redesSociais.add(redeSocialNova);
         this.seguidores += quantidadeDeSeguidores;
-        return this.redesSociais;
     }
 
-    public void atualizarTotalSeguidores() {
+    
+    public void setSeguidores() {
         this.seguidores = redesSociais.stream()
                 .mapToInt(RedeSocial::getQuantidadeDeSeguidores)
                 .sum();
     }
 
-    
+    public TipoUsuario getTipo() {
+        return tipo;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+    public String getSenha() {
+        return senha;
+    }
+
     public Integer getId() {
         return id;
     }

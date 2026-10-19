@@ -1,4 +1,4 @@
-package app.Influencer.models;
+package app.Adm.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

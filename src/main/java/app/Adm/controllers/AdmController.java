@@ -41,4 +41,7 @@ public class AdmController {
         categoriaService.adicionarCategoria(nome);
         return "redirect:/adm/painel"; // Redireciona para a página de categorias após adicionar
     }
+
+
+    
 }

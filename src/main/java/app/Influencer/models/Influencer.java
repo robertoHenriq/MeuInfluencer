@@ -31,6 +31,7 @@ public class Influencer {
     private String email;
     private String senha;
 
+    @Column(name = "tipo_usuario", nullable = false, updatable = false)
     private final TipoUsuario tipo = TipoUsuario.INFLUENCER;
 
 

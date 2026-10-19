@@ -15,4 +15,15 @@ public class HomeController {
     public String comoFunciona() {
         return "como-funciona"; // Abre o arquivo como-funciona.html em templates
     }
+
+    @GetMapping("/cadastro")
+    public String cadastro() {
+        return "usuario/cadastro"; // Abre o arquivo cadastro.html em templates/usuario
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "usuario/login"; // Abre o arquivo login.html em templates/usuario
+    }
+
 }

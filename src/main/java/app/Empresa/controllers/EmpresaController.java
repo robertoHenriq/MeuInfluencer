@@ -32,6 +32,11 @@ public class EmpresaController {
         return "empresa/empresas"; // Nome do arquivo HTML (empresa.html) dentro de templates
     }
 
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "empresa/dashboard"; // Nome do arquivo HTML (dashboard.html) dentro de templates/empresa
+    }
+
     @PostMapping("/adicionar")
     public String adicionarEmpresa(@Validated Empresa empresa, BindingResult result, Model model) {
         if(result.hasErrors()){

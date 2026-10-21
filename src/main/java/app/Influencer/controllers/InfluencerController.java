@@ -22,15 +22,9 @@ public class InfluencerController {
     }
 
     @GetMapping("/dashboard")
-    public String abrirDashboard(Model model) {
-        model.addAttribute("influenciadores", influencerService.listarInfluencers());
-        model.addAttribute("categorias", categoriaService.listarCategorias());
-        Influencer novoInfluencer = new Influencer();
-        novoInfluencer.getRedesSociais().add(new RedeSocial());
-        model.addAttribute("influencer", novoInfluencer);
-        return "influencer/influenciadores";
+    public String dashboard(Model model) {
+        return "influencer/dashboard"; // Nome do arquivo HTML (dashboard.html) dentro de templates/influencer
     }
-
     @PostMapping("/adicionar")
     public String adicionarInfluencer(@ModelAttribute Influencer influencer){
         influencer.setSeguidores();

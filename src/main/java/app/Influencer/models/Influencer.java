@@ -60,6 +60,7 @@ public class Influencer {
 
     //Funções
 
+
     public boolean isEmailVerificado() {
         return emailVerificado;
     }

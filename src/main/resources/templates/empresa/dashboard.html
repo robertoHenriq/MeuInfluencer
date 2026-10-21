@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel da Empresa - Encontre Influenciadores | MeuInfluencer</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar-filters {
+            background-color: #fff;
+            border-right: 1px solid #dee2e6;
+            min-height: calc(100vh - 56px);
+        }
+        .card-influencer {
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s ease-in-out;
+        }
+        .card-influencer:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-color: #a71d2a;
+        }
+        .badge-nicho {
+            background-color: #f1f3f5;
+            color: #495057;
+            font-weight: 500;
+        }
+        .btn-custom {
+            background-color: #a71d2a;
+            color: #fff;
+        }
+        .btn-custom:hover {
+            background-color: #80141f;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar Superior -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold" href="#" style="color: #ff6b6b;">MeuInfluencer</a>
+            <div class="d-flex align-items-center">
+                <span class="text-light me-3">Olá, <strong th:text="${empresaNome}">Empresa</strong></span>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm">Sair</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            <!-- BARRA LATERAL DE FILTROS (Esquerda) -->
+            <div class="col-md-3 p-4 sidebar-filters">
+                <h5 class="fw-bold mb-3">Filtrar Influenciadores</h5>
+                
+                <!-- Categoria / Nicho -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold small text-muted">CATEGORIA / NICHO</label>
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" id="catTodas" checked>
+                        <label class="form-check-label small" for="catTodas">Todas as categorias</label>
+                    </div>
+                    <div class="form-check mb-1" th:each="cat : ${categorias}">
+                        <input class="form-check-input" type="checkbox" th:id="${'cat_' + cat.id}">
+                        <label class="form-check-label small" th:for="${'cat_' + cat.id}" th:text="${cat.nome}">Moda e Beleza</label>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Faixa de Preço por Story -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold small text-muted">VALOR POR STORY (R$)</label>
+                    <select class="form-select form-select-sm">
+                        <option value="">Qualquer valor</option>
+                        <option value="50">Até R$ 100</option>
+                        <option value="200">R$ 100 - R$ 500</option>
+                        <option value="500">Acima de R$ 500</option>
+                    </select>
+                </div>
+
+                <hr>
+
+                <!-- Localização -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small text-muted">LOCALIZAÇÃO</label>
+                    <select class="form-select form-select-sm mb-2">
+                        <option>Todas as regiões</option>
+                        <option>Sudeste</option>
+                        <option>Sul</option>
+                        <option>Nordeste</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- CONTEÚDO PRINCIPAL (Direita - Cards) -->
+            <div class="col-md-9 p-4">
+                
+                <!-- Barra de Pesquisa -->
+                <div class="input-group mb-4 shadow-sm">
+                    <input type="text" class="form-control" placeholder="Buscar influenciador por nome, @ do Instagram ou nicho...">
+                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-search"></i></button>
+                </div>
+
+                <!-- Lista de Cards de Influenciadores -->
+                <div class="d-flex flex-column gap-3">
+                    
+                    <!-- CARD 1 (Exemplo) -->
+                    <div class="card card-influencer p-4 rounded-3 shadow-sm">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="fw-bold text-dark mb-1">Mariana Costa <span class="text-muted fs-6 fw-normal">(@maricostastyle)</span></h5>
+                                <p class="text-muted small mb-2">Publicado há 2 horas • Propostas enviadas: 4</p>
+                                <p class="text-secondary mb-3">
+                                    Criadora de conteúdo focada em moda sustentável, rotina diária e lifestyle em São Paulo. Alta taxa de engajamento nos Stories com enquetes diárias e caixas de perguntas ativas.
+                                </p>
+                                <!-- Nichos/Tags -->
+                                <div class="d-flex flex-wrap gap-1 mb-3">
+                                    <span class="badge badge-nicho px-2 py-1">Moda</span>
+                                    <span class="badge badge-nicho px-2 py-1">Lifestyle</span>
+                                    <span class="badge badge-nicho px-2 py-1">Instagram Stories</span>
+                                    <span class="badge badge-nicho px-2 py-1">UGC</span>
+                                </div>
+                            </div>
+                            <!-- Valor do Story -->
+                            <div class="text-end">
+                                <span class="text-muted small d-block">Valor por Story</span>
+                                <h4 class="fw-bold text-success mb-3">R$ 150,00</h4>
+                                <button class="btn btn-custom btn-sm px-4 fw-semibold">Fazer Proposta</button>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center text-muted small pt-2 border-top">
+                            <i class="fa fa-user-circle me-1 fs-5"></i> M. C. S. • <i class="fa fa-map-marker-alt ms-2 me-1"></i> Brasil • 
+                            <span class="text-warning ms-2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2 (Exemplo dinâmico com Thymeleaf, caso queira iterar do backend) -->
+                    <div class="card card-influencer p-4 rounded-3 shadow-sm">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="fw-bold text-dark mb-1">Carlos Tech <span class="text-muted fs-6 fw-normal">(@carlostech)</span></h5>
+                                <p class="text-muted small mb-2">Publicado há 5 horas • Propostas enviadas: 8</p>
+                                <p class="text-secondary mb-3">
+                                    Review de gadgets, tecnologia e dicas de produtividade para empresas de software e e-commerces. Divulgação via sequência de 3 stories com link direto arrastar para cima.
+                                </p>
+                                <div class="d-flex flex-wrap gap-1 mb-3">
+                                    <span class="badge badge-nicho px-2 py-1">Tecnologia</span>
+                                    <span class="badge badge-nicho px-2 py-1">Gadgets</span>
+                                    <span class="badge badge-nicho px-2 py-1">Review</span>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <span class="text-muted small d-block">Valor por Story</span>
+                                <h4 class="fw-bold text-success mb-3">R$ 300,00</h4>
+                                <button class="btn btn-custom btn-sm px-4 fw-semibold">Fazer Proposta</button>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center text-muted small pt-2 border-top">
+                            <i class="fa fa-user-circle me-1 fs-5"></i> C. T. O. • <i class="fa fa-map-marker-alt ms-2 me-1"></i> Brasil • 
+                            <span class="text-warning ms-2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-alt"></i></span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

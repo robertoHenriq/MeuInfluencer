@@ -22,7 +22,7 @@ public class Empresa {
     private String cnpj;
     
     @Column(name = "valor_da_publi", nullable = false)
-    private BigDecimal saldo;
+    private BigDecimal saldo = new BigDecimal("0.00");
     
     private String email;
 

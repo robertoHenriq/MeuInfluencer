@@ -22,28 +22,28 @@ public class AuthController {
     public String registrar(@RequestParam("email") String email,
                             @RequestParam("senha") String senha,
                             @RequestParam("tipoUsuario") String tipoUsuario,
-                            RedirectAttributes redirectAttributes) {
+                            RedirectAttributes redirectAttributes) { // Apenas uma variável aqui!
         
-        // Dica: Utilize BCryptPasswordEncoder para criptografar a senha aqui!
-        String senhaCriptografada = senha; // Troque pelo seu encoder do Spring Security
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        senhaCriptografada = encoder.encode(senha);
+        String senhaCriptografada = encoder.encode(senha);
+        
         if ("INFLUENCER".equals(tipoUsuario)) {
             Influencer influencer = new Influencer();
             influencer.setEmail(email);
-            // Defina outros campos iniciais se necessário
             authService.registrarInfluencer(influencer, senhaCriptografada);
             
         } else if ("EMPRESA".equals(tipoUsuario)) {
             Empresa empresa = new Empresa();
             empresa.setEmail(email);
-            // Defina outros campos iniciais se necessário
             authService.registrarEmpresa(empresa, senhaCriptografada);
         }
 
-        redirectAttributes.addFlashAttribute("sucesso", "Cadastro realizado! Verifique seu e-mail.");
-        return "redirect:/auth/verificar-tela"; // Direciona para a tela dos 4 quadradinhos
+        // Usando a mesma variável unificada para enviar os dados para o HTML
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Cadastro realizado! Um e-mail com as instruções foi enviado.");
+
+        return "redirect:/auth/verificar-tela"; 
     }
+
 
     // Rota que exibe a tela de digitar o código de 4 dígitos
     @GetMapping("/auth/verificar-tela")

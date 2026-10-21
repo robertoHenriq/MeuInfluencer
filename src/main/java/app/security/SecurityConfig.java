@@ -15,6 +15,7 @@ public class SecurityConfig {
 
         
         http
+        
             .csrf(csrf -> csrf.disable()) // Desativa CSRF para facilitar formulários locais
 
             .authorizeHttpRequests(auth -> auth
@@ -31,6 +32,7 @@ public class SecurityConfig {
                     "verificacao-email",
                     "verificacao",
                     "/js/**", 
+                    "/dashboard",
                     "/images/**"
                 ).permitAll()
                 // Qualquer outra página exigirá login
@@ -41,6 +43,10 @@ public class SecurityConfig {
                 .permitAll()
                 .defaultSuccessUrl("/dashboard", true) // Para onde vai após logar com sucesso
                 .permitAll()
+            )
+                .sessionManagement(session -> session
+                .maximumSessions(1) // Opcional: limita a 1 sessão ativa por usuário
+                .expiredUrl("/login?expired=true") // Redireciona para o login se a sessão expirar
             );
 
         return http.build();

@@ -39,10 +39,22 @@ public class Empresa {
     )
     private List<Categoria> categorias = new ArrayList<>();
     
+
     // CORRIGIDO: Alterado para List no plural para funcionar com @OneToMany
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "empresa_id")
     private List<RedeSocial> redesSociais = new ArrayList<>();
+
+    private boolean emailVerificado = false;
+    private String tokenVerificacao;
+
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+
+
 
     public Empresa() {}
 
@@ -54,6 +66,22 @@ public class Empresa {
         this.senha = senha;
         this.categorias = new ArrayList<>(categorias); 
         this.redesSociais = new ArrayList<>(redesSociais);
+    }
+
+    public boolean isEmailVerificado() {
+        return emailVerificado;
+    }
+
+    public void setEmailVerificado(boolean emailVerificado) {
+        this.emailVerificado = emailVerificado;
+    }
+
+    public String getTokenVerificacao() {
+        return tokenVerificacao;
+    }
+
+    public void setTokenVerificacao(String tokenVerificacao) {
+        this.tokenVerificacao = tokenVerificacao;
     }
 
     public TipoUsuario getTipo() {

@@ -67,17 +67,17 @@
         </p>
         
         <!-- Formulário de Verificação -->
-        <form th:action="@{/auth/verificar-codigo}" method="POST">
+        <form th:action="@{/auth/verificar-codigo}" method="POST" id="formVerificacao">
             
-            <!-- 4 Espaços para o Código -->
+            <!-- 4 Espaços para o Código com 'name' individuais -->
             <div class="d-flex justify-content-center gap-2 mb-4">
-                <input type="text" class="form-control code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required autofocus>
-                <input type="text" class="form-control code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
-                <input type="text" class="form-control code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
-                <input type="text" class="form-control code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                <input type="text" class="form-control code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" id="d1" required autofocus>
+                <input type="text" class="form-control code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" id="d2" required>
+                <input type="text" class="form-control code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" id="d3" required>
+                <input type="text" class="form-control code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" id="d4" required>
             </div>
 
-            <!-- Campo oculto opcional para enviar o código completo se quiser juntar via JS no futuro -->
+            <!-- Campo oculto que vai juntar os 4 números em uma string única -->
             <input type="hidden" id="codigoCompleto" name="codigo">
 
             <!-- Botão de Confirmação -->
@@ -95,9 +95,11 @@
         </div>
     </div>
 
-    <!-- Script opcional simples para pular para o próximo campo automaticamente -->
-    <script>
+    <!-- Script opcional simples para pular para o próximo campo automaticamente --><script>
         const inputs = document.querySelectorAll('.code-input');
+        const form = document.getElementById('formVerificacao');
+        const codigoCompletoInput = document.getElementById('codigoCompleto');
+
         inputs.forEach((input, index) => {
             input.addEventListener('input', (e) => {
                 if (e.target.value && index < inputs.length - 1) {
@@ -110,7 +112,16 @@
                 }
             });
         });
-    </script>
+
+        // Junta os 4 números em um só antes de enviar o formulário para o Java
+        form.addEventListener('submit', (e) => {
+            let codigoFinal = '';
+            inputs.forEach(input => {
+                codigoFinal += input.value;
+            });
+            codigoCompletoInput.value = codigoFinal;
+        });
+    </script>   
 
 </body>
 </html>

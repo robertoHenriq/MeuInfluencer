@@ -33,7 +33,8 @@ public class Influencer {
 
     @Column(name = "tipo_usuario", nullable = false, updatable = false)
     private final TipoUsuario tipo = TipoUsuario.INFLUENCER;
-
+    private boolean emailVerificado = false;
+    private String tokenVerificacao;
 
     //Constutores
 
@@ -58,6 +59,22 @@ public class Influencer {
     }
 
     //Funções
+
+    public boolean isEmailVerificado() {
+        return emailVerificado;
+    }
+
+    public void setEmailVerificado(boolean emailVerificado) {
+        this.emailVerificado = emailVerificado;
+    }
+
+    public String getTokenVerificacao() {
+        return tokenVerificacao;
+    }
+
+    public void setTokenVerificacao(String tokenVerificacao) {
+        this.tokenVerificacao = tokenVerificacao;
+    }
 
     public void setRedeSocials(String nome, int quantidadeDeSeguidores, String linkDoPerfil ) {
         RedeSocial redeSocialNova = new RedeSocial(nome, quantidadeDeSeguidores, linkDoPerfil);

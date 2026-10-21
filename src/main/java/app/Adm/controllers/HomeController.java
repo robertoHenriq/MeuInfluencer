@@ -25,5 +25,4 @@ public class HomeController {
     public String login() {
         return "usuario/login"; // Abre o arquivo login.html em templates/usuario
     }
-
 }

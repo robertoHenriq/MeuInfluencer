@@ -1,31 +1,69 @@
 package app.Adm.controllers;
 
+import app.Adm.services.AuthService;
+import app.Empresa.models.Empresa;
+import app.Influencer.models.Influencer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/auth")
 public class AuthController {
-    
-    @PostMapping("/registrar")
-    public String registrarUsuario(@RequestParam String email, 
-                                   @RequestParam String senha, 
-                                   @RequestParam String tipoUsuario) {
+
+    @Autowired
+    private AuthService authService;
+
+    // Rota para processar o cadastro enviado pelo HTML
+    @PostMapping("/auth/registrar")
+    public String registrar(@RequestParam("email") String email,
+                            @RequestParam("senha") String senha,
+                            @RequestParam("tipoUsuario") String tipoUsuario,
+                            RedirectAttributes redirectAttributes) {
         
-        // 1. TODO: Salvar o usuário no banco de dados (com status pendente de verificação)
-        // 2. TODO: Gerar e enviar o código de 4 dígitos por e-mail
-        
-        // Redireciona o navegador para a tela de verificação
-        return "redirect:/auth/verificar-email";
+        // Dica: Utilize BCryptPasswordEncoder para criptografar a senha aqui!
+        String senhaCriptografada = senha; // Troque pelo seu encoder do Spring Security
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        senhaCriptografada = encoder.encode(senha);
+        if ("INFLUENCER".equals(tipoUsuario)) {
+            Influencer influencer = new Influencer();
+            influencer.setEmail(email);
+            // Defina outros campos iniciais se necessário
+            authService.registrarInfluencer(influencer, senhaCriptografada);
+            
+        } else if ("EMPRESA".equals(tipoUsuario)) {
+            Empresa empresa = new Empresa();
+            empresa.setEmail(email);
+            // Defina outros campos iniciais se necessário
+            authService.registrarEmpresa(empresa, senhaCriptografada);
+        }
+
+        redirectAttributes.addFlashAttribute("sucesso", "Cadastro realizado! Verifique seu e-mail.");
+        return "redirect:/auth/verificar-tela"; // Direciona para a tela dos 4 quadradinhos
     }
 
-    @GetMapping("/verificar-email")
+    // Rota que exibe a tela de digitar o código de 4 dígitos
+    @GetMapping("/auth/verificar-tela")
     public String exibirTelaVerificacao() {
-        // Retorna o nome do seu arquivo HTML (verificacao-email.html)
-        return "usuario/verificacao";
+        return "usuario/verificacao-email"; // Nome do seu arquivo HTML da tela de verificação (ex: verificacao-email.html)
     }
 
+    // Rota que recebe os 4 dígitos preenchidos na tela
+    @PostMapping("/auth/verificar-codigo")
+    public String verificarCodigo(@RequestParam("codigo") String codigo,
+                                  RedirectAttributes redirectAttributes) {
+        
+        boolean verificado = authService.verificarCodigo(codigo);
+
+        if (!verificado) {
+            redirectAttributes.addFlashAttribute("erro", "Código inválido. Tente novamente.");
+            return "redirect:/auth/verificar-tela";
+        }
+
+        redirectAttributes.addFlashAttribute("sucesso", "E-mail verificado com sucesso! Faça login.");
+        return "redirect:/login";
+    }
 }

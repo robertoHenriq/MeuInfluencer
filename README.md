@@ -10,6 +10,14 @@ Marketplace para conectar empresas a criadores de conteúdo.
 
 ## Funcionalidades
 
+### Autenticação e recuperação de senha
+
+- Cadastro só é persistido após a confirmação do código de e-mail.
+- A opção "Esqueci minha senha" no login e no cadastro solicita um código de seis dígitos para uma conta existente e verificada.
+- O código de recuperação expira em 10 minutos, é armazenado como hash e permite no máximo cinco tentativas; há intervalo mínimo de 60 segundos entre envios.
+- Depois da validação, um token temporário mantido na sessão autoriza a troca de senha por até cinco minutos. A nova senha usa o `PasswordEncoder` BCrypt existente e é gravada no perfil de empresa ou influenciador.
+- A resposta ao pedido de código não revela se o endereço está cadastrado. A recuperação não autentica automaticamente o usuário.
+
 ### Influenciadores
 
 - Perfil editável com apresentação, foto, categorias e redes sociais.

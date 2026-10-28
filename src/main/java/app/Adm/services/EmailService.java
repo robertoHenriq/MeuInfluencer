@@ -25,4 +25,16 @@ public class EmailService {
 
         mailSender.send(mensagem);
     }
+
+    public void enviarEmailRecuperacao(String paraEmail, String codigo) {
+        SimpleMailMessage mensagem = new SimpleMailMessage();
+        mensagem.setTo(paraEmail);
+        mensagem.setSubject("Código para redefinir sua senha - MeuInfluencer");
+        mensagem.setText("Olá!\n\n" +
+                "Recebemos uma solicitação para redefinir a senha da sua conta MeuInfluencer.\n" +
+                "Seu código de verificação é: " + codigo + "\n\n" +
+                "O código expira em 10 minutos e pode ser usado uma única vez. " +
+                "Se você não solicitou a alteração, ignore este e-mail.");
+        mailSender.send(mensagem);
+    }
 }

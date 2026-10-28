@@ -5,9 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-@Entity 
+@Entity
 public class Categoria {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -15,7 +15,6 @@ public class Categoria {
 
     public Categoria() {
     }
-
     public Categoria(String nome) {
         this.nome = nome;
     }

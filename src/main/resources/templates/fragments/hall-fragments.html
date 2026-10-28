@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="header(perfil, dashboardUrl)" class="hall-topbar">
+    <div class="hall-topbar-inner">
+        <a class="hall-brand" th:href="${dashboardUrl}" aria-label="MeuInfluencer, voltar ao dashboard">
+            <span class="hall-brand-mark"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i></span>
+            <span>MeuInfluencer <small>/ Hall</small></span>
+        </a>
+        <a class="hall-back-link" th:href="${dashboardUrl}">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>Voltar ao dashboard</span>
+        </a>
+        <div class="hall-top-actions">
+            <label class="hall-global-search">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <input id="hall-search" type="search" placeholder="Buscar projetos e criadores..." aria-label="Buscar no Hall">
+                <kbd>/</kbd>
+            </label>
+            <button class="hall-icon-button notification-button" type="button" aria-label="Notificações">
+                <i class="fa-regular fa-bell" aria-hidden="true"></i><span id="notification-count" class="notification-count">2</span>
+            </button>
+            <button class="hall-profile-button" type="button" aria-label="Perfil conectado">
+                <img th:if="${perfil.avatar != null and !#strings.isEmpty(perfil.avatar)}" th:src="${perfil.avatar}" alt="">
+                <span th:unless="${perfil.avatar != null and !#strings.isEmpty(perfil.avatar)}" th:text="${#strings.substring(perfil.nome,0,1)}">U</span>
+            </button>
+            <form th:action="@{/logout}" method="post" class="hall-logout">
+                <button class="hall-icon-button" type="submit" aria-label="Sair"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i></button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<nav th:fragment="navigation(abaInicial, tipoPerfil)" class="hall-tabs" aria-label="Seções do Hall">
+    <button class="hall-tab" type="button" data-tab="projetos" aria-controls="panel-projetos">
+        <i class="fa-solid fa-briefcase" aria-hidden="true"></i>Projetos das empresas
+        <span class="tab-counter" data-counter="projects">12</span>
+    </button>
+    <button class="hall-tab" type="button" data-tab="influenciadores" aria-controls="panel-influenciadores">
+        <i class="fa-solid fa-users" aria-hidden="true"></i>Influenciadores disponíveis
+        <span class="tab-counter" data-counter="influencers">10</span>
+    </button>
+    <button th:if="${tipoPerfil == 'EMPRESA'}" class="hall-tab" type="button" data-tab="propostas" aria-controls="panel-propostas">
+        <i class="fa-solid fa-inbox" aria-hidden="true"></i>Propostas recebidas
+        <span class="tab-counter" id="received-proposals-count">0</span>
+    </button>
+</nav>
+</body>
+</html>

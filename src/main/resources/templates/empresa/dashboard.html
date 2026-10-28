@@ -1,186 +1,170 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel da Empresa - Encontre Influenciadores | MeuInfluencer</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome para ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Meu painel | MeuInfluencer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .sidebar-filters {
-            background-color: #fff;
-            border-right: 1px solid #dee2e6;
-            min-height: calc(100vh - 56px);
-        }
-        .card-influencer {
-            border: 1px solid #e0e0e0;
-            transition: all 0.2s ease-in-out;
-        }
-        .card-influencer:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border-color: #a71d2a;
-        }
-        .badge-nicho {
-            background-color: #f1f3f5;
-            color: #495057;
-            font-weight: 500;
-        }
-        .btn-custom {
-            background-color: #a71d2a;
-            color: #fff;
-        }
-        .btn-custom:hover {
-            background-color: #80141f;
-            color: #fff;
-        }
+        :root { --ink:#f8d7da;--muted:#d1a1a1;--bg:#1a0f0f;--panel:#2c1515;--line:#492020;--red:#a71d2a;--bright:#ff6b6b; }
+        body { background:var(--bg);color:var(--ink); }
+        .navbar,.panel,.creator-card,.stat { background:var(--panel);border:1px solid var(--line); }
+        .navbar { position:sticky;top:0;z-index:10; }
+        .panel,.creator-card,.stat { border-radius:1rem; }
+        .creator-card { transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease; }
+        .creator-card:hover { transform:translateY(-3px);border-color:var(--red);box-shadow:0 12px 30px #0005; }
+        .form-control,.form-select { background:#1a0f0f;color:#fff;border-color:#5c2626; }
+        .form-control:focus,.form-select:focus { background:#1a0f0f;color:#fff;border-color:var(--bright);box-shadow:0 0 0 .2rem #a71d2a44; }
+        .form-control::placeholder { color:#b98d8d; }
+        .btn-custom { background:var(--red);border-color:var(--red);color:white; }
+        .btn-custom:hover { background:#80141f;color:white; }
+        .text-muted { color:var(--muted)!important; }
+        .creator-avatar { height:76px;width:76px;object-fit:cover;border-radius:50%;border:2px solid var(--red); }
+        .portfolio-img { width:100%;height:180px;object-fit:cover;border-radius:.7rem; }
+        .section-link { color:var(--bright);text-decoration:none; }
+        .section-link:hover { color:white; }
+        .badge-status { background:#542127;color:#ffd9dc; }
+        .hall-shortcut { background:linear-gradient(110deg,#3b151a,#251213 72%);border:1px solid #a71d2a;border-radius:1rem;transition:transform .2s ease,box-shadow .2s ease; }
+        .hall-shortcut:hover { transform:translateY(-3px);box-shadow:0 12px 30px #0006; }
+        .hall-shortcut-icon { display:grid;place-items:center;width:52px;height:52px;border-radius:1rem;background:#a71d2a;color:#fff;font-size:1.35rem; }
+        .hall-shortcut-count { color:#ffb5b5;font-size:.85rem;animation:hallCountPulse 1.8s ease-in-out infinite; }
+        @keyframes hallCountPulse { 50% { text-shadow:0 0 12px #ff6b6b99;transform:scale(1.035); } }
+        .table { --bs-table-bg:transparent;--bs-table-color:var(--ink);--bs-table-border-color:var(--line); }
+        section { scroll-margin-top:85px; }
     </style>
 </head>
 <body>
-
-    <!-- Navbar Superior -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand fw-bold" href="#" style="color: #ff6b6b;">MeuInfluencer</a>
-            <div class="d-flex align-items-center">
-                <span class="text-light me-3">Olá, <strong th:text="${empresaNome}">Empresa</strong></span>
-                <form th:action="@{/logout}" method="post" class="d-inline">
-                    <button type="submit" class="btn btn-outline-light btn-sm">Sair</button>
-                </form>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container-fluid">
-        <div class="row">
-            
-            <!-- BARRA LATERAL DE FILTROS (Esquerda) -->
-            <div class="col-md-3 p-4 sidebar-filters">
-                <h5 class="fw-bold mb-3">Filtrar Influenciadores</h5>
-                
-                <!-- Categoria / Nicho -->
-                <div class="mb-4">
-                    <label class="form-label fw-semibold small text-muted">CATEGORIA / NICHO</label>
-                    <div class="form-check mb-1">
-                        <input class="form-check-input" type="checkbox" id="catTodas" checked>
-                        <label class="form-check-label small" for="catTodas">Todas as categorias</label>
-                    </div>
-                    <div class="form-check mb-1" th:each="cat : ${categorias}">
-                        <input class="form-check-input" type="checkbox" th:id="${'cat_' + cat.id}">
-                        <label class="form-check-label small" th:for="${'cat_' + cat.id}" th:text="${cat.nome}">Moda e Beleza</label>
-                    </div>
-                </div>
-
-                <hr>
-
-                <!-- Faixa de Preço por Story -->
-                <div class="mb-4">
-                    <label class="form-label fw-semibold small text-muted">VALOR POR STORY (R$)</label>
-                    <select class="form-select form-select-sm">
-                        <option value="">Qualquer valor</option>
-                        <option value="50">Até R$ 100</option>
-                        <option value="200">R$ 100 - R$ 500</option>
-                        <option value="500">Acima de R$ 500</option>
-                    </select>
-                </div>
-
-                <hr>
-
-                <!-- Localização -->
-                <div class="mb-3">
-                    <label class="form-label fw-semibold small text-muted">LOCALIZAÇÃO</label>
-                    <select class="form-select form-select-sm mb-2">
-                        <option>Todas as regiões</option>
-                        <option>Sudeste</option>
-                        <option>Sul</option>
-                        <option>Nordeste</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- CONTEÚDO PRINCIPAL (Direita - Cards) -->
-            <div class="col-md-9 p-4">
-                
-                <!-- Barra de Pesquisa -->
-                <div class="input-group mb-4 shadow-sm">
-                    <input type="text" class="form-control" placeholder="Buscar influenciador por nome, @ do Instagram ou nicho...">
-                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-search"></i></button>
-                </div>
-
-                <!-- Lista de Cards de Influenciadores -->
-                <div class="d-flex flex-column gap-3">
-                    
-                    <!-- CARD 1 (Exemplo) -->
-                    <div class="card card-influencer p-4 rounded-3 shadow-sm">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">Mariana Costa <span class="text-muted fs-6 fw-normal">(@maricostastyle)</span></h5>
-                                <p class="text-muted small mb-2">Publicado há 2 horas • Propostas enviadas: 4</p>
-                                <p class="text-secondary mb-3">
-                                    Criadora de conteúdo focada em moda sustentável, rotina diária e lifestyle em São Paulo. Alta taxa de engajamento nos Stories com enquetes diárias e caixas de perguntas ativas.
-                                </p>
-                                <!-- Nichos/Tags -->
-                                <div class="d-flex flex-wrap gap-1 mb-3">
-                                    <span class="badge badge-nicho px-2 py-1">Moda</span>
-                                    <span class="badge badge-nicho px-2 py-1">Lifestyle</span>
-                                    <span class="badge badge-nicho px-2 py-1">Instagram Stories</span>
-                                    <span class="badge badge-nicho px-2 py-1">UGC</span>
-                                </div>
-                            </div>
-                            <!-- Valor do Story -->
-                            <div class="text-end">
-                                <span class="text-muted small d-block">Valor por Story</span>
-                                <h4 class="fw-bold text-success mb-3">R$ 150,00</h4>
-                                <button class="btn btn-custom btn-sm px-4 fw-semibold">Fazer Proposta</button>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center text-muted small pt-2 border-top">
-                            <i class="fa fa-user-circle me-1 fs-5"></i> M. C. S. • <i class="fa fa-map-marker-alt ms-2 me-1"></i> Brasil • 
-                            <span class="text-warning ms-2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span>
-                        </div>
-                    </div>
-
-                    <!-- CARD 2 (Exemplo dinâmico com Thymeleaf, caso queira iterar do backend) -->
-                    <div class="card card-influencer p-4 rounded-3 shadow-sm">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1">Carlos Tech <span class="text-muted fs-6 fw-normal">(@carlostech)</span></h5>
-                                <p class="text-muted small mb-2">Publicado há 5 horas • Propostas enviadas: 8</p>
-                                <p class="text-secondary mb-3">
-                                    Review de gadgets, tecnologia e dicas de produtividade para empresas de software e e-commerces. Divulgação via sequência de 3 stories com link direto arrastar para cima.
-                                </p>
-                                <div class="d-flex flex-wrap gap-1 mb-3">
-                                    <span class="badge badge-nicho px-2 py-1">Tecnologia</span>
-                                    <span class="badge badge-nicho px-2 py-1">Gadgets</span>
-                                    <span class="badge badge-nicho px-2 py-1">Review</span>
-                                </div>
-                            </div>
-                            <div class="text-end">
-                                <span class="text-muted small d-block">Valor por Story</span>
-                                <h4 class="fw-bold text-success mb-3">R$ 300,00</h4>
-                                <button class="btn btn-custom btn-sm px-4 fw-semibold">Fazer Proposta</button>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center text-muted small pt-2 border-top">
-                            <i class="fa fa-user-circle me-1 fs-5"></i> C. T. O. • <i class="fa fa-map-marker-alt ms-2 me-1"></i> Brasil • 
-                            <span class="text-warning ms-2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-alt"></i></span>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-            
-        </div>
+<nav class="navbar navbar-dark px-3 px-lg-5">
+    <a class="navbar-brand fw-bold text-danger" href="/">MeuInfluencer <small class="text-muted fw-normal">/ área da empresa</small></a>
+    <div class="d-flex align-items-center gap-3"><span class="d-none d-md-inline text-muted" th:text="${empresa.nome != null ? empresa.nome : empresa.email}">Empresa</span>
+        <form th:action="@{/logout}" method="post"><button class="btn btn-outline-danger btn-sm">Sair</button></form>
+    </div>
+</nav>
+<main class="container py-4 py-lg-5">
+    <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+    <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div><p class="text-danger text-uppercase small fw-bold mb-1">Marketplace de criadores</p>
+            <h1 class="h2 fw-bold mb-1" th:text="${empresa.nome != null ? 'Olá, ' + empresa.nome : 'Configure seu perfil de empresa'}">Olá</h1>
+            <p class="text-muted mb-0">Encontre talentos, envie briefings e acompanhe cada entrega.</p></div>
+        <a class="btn btn-custom" href="#explorar"><i class="fa-solid fa-magnifying-glass me-2"></i>Explorar criadores</a>
+    </div>
+    <a class="hall-shortcut d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 p-lg-4 mb-4 text-decoration-none"
+       th:href="@{/hall}" aria-label="Explorar o Hall e encontrar influenciadores para seus projetos">
+        <span class="d-flex align-items-center gap-3">
+            <span class="hall-shortcut-icon" aria-hidden="true"><i class="fa-solid fa-people-arrows-left-right"></i></span>
+            <span><strong class="d-block text-white">Explorar o Hall</strong><small class="text-muted">Publique campanhas e encontre criadores da sua cidade.</small></span>
+        </span>
+        <span class="d-flex align-items-center gap-3"><span class="hall-shortcut-count"><i class="fa-solid fa-sparkles me-1"></i>10 influenciadores ativos</span><i class="fa-solid fa-arrow-right text-danger" aria-hidden="true"></i></span>
+    </a>
+    <div class="row g-3 mb-4">
+        <div class="col-sm-4"><div class="stat p-3 h-100"><small class="text-muted">Criadores disponíveis</small><div class="fs-4 fw-bold" th:text="${#lists.size(influencers)}">0</div></div></div>
+        <div class="col-sm-4"><div class="stat p-3 h-100"><small class="text-muted">Meus pedidos</small><div class="fs-4 fw-bold" th:text="${#lists.size(pedidos)}">0</div></div></div>
+        <div class="col-sm-4"><div class="stat p-3 h-100"><small class="text-muted">Pagamentos</small><div class="small fw-semibold mt-2">Simulação apenas · sem cobrança real</div></div></div>
+    </div>
+    <div class="d-flex flex-wrap gap-3 border-bottom border-danger border-opacity-25 pb-3 mb-4">
+        <a class="section-link" href="#perfil">Perfil da empresa</a><a class="section-link" href="#explorar">Explorar influenciadores</a><a class="section-link" href="#pedidos">Meus pedidos</a>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <section id="perfil" class="panel p-3 p-lg-4 mb-4">
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <img class="creator-avatar" th:if="${empresa.logoUrl != null}" th:src="${empresa.logoUrl}" alt="Logo da empresa">
+            <div class="creator-avatar d-flex align-items-center justify-content-center fs-2 text-danger" th:if="${empresa.logoUrl == null}"><i class="fa-solid fa-building"></i></div>
+            <div><h2 class="h4 mb-1">Perfil da empresa</h2><p class="text-muted mb-0">Complete os dados antes de enviar um pedido de contratação.</p></div>
+        </div>
+        <form th:action="@{/empresa/perfil}" method="post" enctype="multipart/form-data" class="row g-3">
+            <div class="col-md-6"><label class="form-label">Nome da empresa</label><input class="form-control" name="nome" required maxlength="160" th:value="${empresa.nome}" placeholder="Nome público"></div>
+            <div class="col-md-6"><label class="form-label">CNPJ</label><input class="form-control" name="cnpj" id="cnpj" required maxlength="18" th:value="${empresa.cnpj}" placeholder="00.000.000/0001-00"></div>
+            <div class="col-md-6"><label class="form-label">Segmento</label><input class="form-control" name="segmento" required maxlength="120" th:value="${empresa.segmento}" placeholder="Moda, tecnologia, alimentação..."></div>
+            <div class="col-md-6"><label class="form-label">Site</label><input class="form-control" name="site" type="url" th:value="${empresa.site}" placeholder="https://suaempresa.com"></div>
+            <div class="col-md-6"><label class="form-label">Logo</label><input class="form-control" name="logo" type="file" accept="image/png,image/jpeg"><small class="text-muted">JPG ou PNG; até 5 MB.</small></div>
+            <div class="col-12"><label class="form-label">Sobre a empresa</label><textarea class="form-control" name="descricao" rows="3" maxlength="2000" th:text="${empresa.descricao}" placeholder="Conte sobre a marca e suas campanhas."></textarea></div>
+            <div class="col-12"><button class="btn btn-custom"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar perfil</button></div>
+        </form>
+    </section>
+
+    <section id="explorar" class="mb-4">
+        <div class="mb-3"><h2 class="h4 mb-1">Encontre seu próximo parceiro</h2><p class="text-muted mb-0">Pesquise por nome, categoria ou rede e compare os pacotes.</p></div>
+        <form th:action="@{/empresa/dashboard}" method="get" class="panel p-3 mb-3 row g-2 align-items-end">
+            <div class="col-lg-4"><label class="form-label small">Busca</label><input class="form-control" name="q" th:value="${q}" placeholder="Nome, nicho, Instagram..."></div>
+            <div class="col-lg-3"><label class="form-label small">Categoria</label><select class="form-select" name="categoriaId"><option value="">Todas</option><option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nome}" th:selected="${categoria.id == categoriaSelecionada}"></option></select></div>
+            <div class="col-lg-2"><label class="form-label small">Seguidores mínimos</label><input class="form-control" name="seguidoresMinimos" type="number" min="0" th:value="${seguidoresMinimos}" placeholder="0"></div>
+            <div class="col-lg-2"><label class="form-label small">Preço máximo (R$)</label><input class="form-control" name="precoMaximo" type="number" min="0" step="0.01" th:value="${precoMaximo}" placeholder="Qualquer"></div>
+            <div class="col-lg-1 d-grid"><button class="btn btn-custom" aria-label="Filtrar"><i class="fa-solid fa-filter"></i></button></div>
+        </form>
+        <div class="row g-3">
+            <div class="col-lg-6" th:each="influencer : ${influencers}">
+                <article class="creator-card p-3 p-lg-4 h-100">
+                    <div class="d-flex gap-3">
+                        <img class="creator-avatar flex-shrink-0" th:if="${influencer.fotoUrl != null}" th:src="${influencer.fotoUrl}" th:alt="${influencer.nome}">
+                        <div class="creator-avatar flex-shrink-0 d-flex align-items-center justify-content-center fs-2 text-danger" th:if="${influencer.fotoUrl == null}"><i class="fa-regular fa-user"></i></div>
+                        <div class="flex-grow-1 min-w-0">
+                            <h3 class="h5 fw-bold mb-1" th:text="${influencer.nome}">Criador</h3>
+                            <p class="small text-muted mb-2" th:text="${influencer.bio != null && !influencer.bio.isBlank() ? influencer.bio : 'Criador de conteúdo'}">Apresentação</p>
+                            <div class="d-flex flex-wrap gap-1 mb-2"><span class="badge text-bg-dark border border-danger border-opacity-25" th:each="categoria : ${influencer.categorias}" th:text="${categoria.nome}">Categoria</span></div>
+                            <div class="small text-muted d-flex flex-wrap gap-3">
+                                <span><i class="fa-solid fa-users me-1 text-danger"></i><span th:text="${#numbers.formatInteger(influencer.seguidores,1,'POINT')}">0</span> seguidores</span>
+                                <a class="text-danger" th:each="rede : ${influencer.redesSociais}" th:href="${rede.linkDoPerfil}" target="_blank" rel="noopener" th:text="${rede.nome}">Rede</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-top border-danger border-opacity-25 mt-3 pt-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2"><strong class="small">Pacotes disponíveis</strong><a class="small text-danger" th:href="@{/empresa/influencers/{id}(id=${influencer.id})}">Ver perfil e portfólio <i class="fa-solid fa-arrow-right ms-1"></i></a></div>
+                        <form th:action="@{/empresa/pedidos}" method="post">
+                            <div class="mb-2"><select class="form-select form-select-sm" name="pacoteId" required><option value="" disabled selected>Escolha um pacote</option><option th:each="pacote : ${influencer.pacotes.?[ativo]}" th:value="${pacote.id}" th:text="${pacote.titulo + ' · R$ ' + #numbers.formatDecimal(pacote.preco,1,'POINT',2,'COMMA') + ' · ' + pacote.prazoDias + ' dias'}"></option></select></div>
+                            <div class="input-group input-group-sm"><input class="form-control" name="briefing" required maxlength="2000" placeholder="Resuma a campanha e o que precisa ser entregue"><button class="btn btn-custom"><i class="fa-solid fa-paper-plane me-1"></i>Convidar</button></div>
+                        </form>
+                    </div>
+                </article>
+            </div>
+            <div class="col-12" th:if="${#lists.isEmpty(influencers)}"><div class="panel p-4 text-center"><i class="fa-solid fa-magnifying-glass fs-3 text-danger mb-2"></i><p class="mb-0">Nenhum perfil completo encontrado com esses filtros. Ajuste a busca ou volte mais tarde.</p></div></div>
+        </div>
+    </section>
+
+    <section id="pedidos" class="panel p-3 p-lg-4">
+        <div class="mb-3"><h2 class="h4 mb-1">Meus pedidos</h2><p class="text-muted mb-0">Acompanhe o status, as entregas e os próximos passos.</p></div>
+        <div class="table-responsive" th:if="${!#lists.isEmpty(pedidos)}">
+            <table class="table align-middle"><thead><tr><th>Criador</th><th>Pacote / briefing</th><th>Valor congelado</th><th>Status</th><th>Ações</th></tr></thead>
+                <tbody><tr th:each="pedido : ${pedidos}">
+                    <td th:text="${pedido.influencer.nome}">Criador</td><td><strong th:text="${pedido.pacoteTitulo}">Pacote</strong><div class="small text-muted" th:text="${pedido.pacoteDescricao}">Escopo contratado</div><div class="small mt-1" th:text="${pedido.briefing}"></div><div class="small" th:if="${pedido.entrega != null}" th:text="${pedido.entrega}"></div></td>
+                    <td th:text="${'R$ ' + #numbers.formatDecimal(pedido.precoCongelado,1,'POINT',2,'COMMA')}">R$ 0,00</td>
+                    <td><span class="badge badge-status" th:text="${pedido.status.descricao}">Status</span></td>
+                    <td><div class="d-flex flex-wrap gap-1">
+                        <form th:if="${pedido.status.name() == 'AGUARDANDO_PAGAMENTO'}" th:action="@{/empresa/pedidos/{id}/pagar-simulado(id=${pedido.id})}" method="post" onsubmit="return confirm('Esta ação é apenas uma simulação e não cobra dinheiro. Continuar?')"><button class="btn btn-sm btn-warning">Simular pagamento</button></form>
+                        <form th:if="${pedido.status.name() == 'ENTREGUE'}" th:action="@{/empresa/pedidos/{id}/aprovar(id=${pedido.id})}" method="post"><button class="btn btn-sm btn-success">Aprovar entrega</button></form>
+                        <form th:if="${pedido.status.name() == 'ENTREGUE'}" th:action="@{/empresa/pedidos/{id}/contestar(id=${pedido.id})}" method="post"><button class="btn btn-sm btn-outline-danger">Abrir disputa</button></form>
+                    </div></td>
+                </tr></tbody>
+            </table>
+        </div>
+        <p class="text-muted mb-0" th:if="${#lists.isEmpty(pedidos)}">Seus convites e contratações aparecerão aqui.</p>
+    </section>
+    <p class="small text-muted text-center mt-4 mb-0"><i class="fa-solid fa-circle-info me-1"></i>Pagamento simulado para testes. Nenhuma transação real é efetuada.</p>
+</main>
+<script>
+    const cnpj = document.getElementById('cnpj');
+    cnpj.addEventListener('input', () => {
+        const value = cnpj.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 14);
+        if (/[A-Z]/.test(value)) {
+            cnpj.value = value;
+            return;
+        }
+        cnpj.value = value
+            .replace(/^(\d{2})(\d)/, '$1.$2')
+            .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/\.(\d{3})(\d)/, '.$1/$2')
+            .replace(/(\d{4})(\d)/, '$1-$2');
+    });
+    document.querySelectorAll('form').forEach(form => form.addEventListener('submit', event => {
+        const submit = form.querySelector('button[type="submit"],button:not([type])');
+        if (submit && !form.hasAttribute('onsubmit')) {
+            submit.disabled = true;
+            submit.dataset.originalText = submit.textContent;
+            submit.textContent = 'Enviando...';
+            setTimeout(() => { submit.disabled = false; submit.textContent = submit.dataset.originalText; }, 5000);
+        }
+    }));
+</script>
 </body>
 </html>

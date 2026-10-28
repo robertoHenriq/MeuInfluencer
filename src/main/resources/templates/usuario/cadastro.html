@@ -67,8 +67,9 @@
         <div th:if="${sucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
             <span th:text="${sucesso}"></span>
         </div>
-        <div th:if="${erro}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <span th:text="${erro}"></span>
+        <div th:if="${mensagemErro}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${mensagemErro}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
 
         <!-- Formulário de Cadastro Único -->

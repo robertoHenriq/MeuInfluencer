@@ -1,12 +1,14 @@
 package app.Influencer.repository;
 
-import app.Influencer.models.Influencer;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import app.Influencer.models.Influencer;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 public interface InfluencerRepository extends JpaRepository<Influencer, Integer> {
-    List<Influencer> findByEmail(String email);
-    Influencer findByTokenVerificacao(String tokenVerificacao);
+    boolean existsByEmailIgnoreCaseAndEmailVerificadoTrue(String email);
+    java.util.Optional<Influencer> findFirstByEmailIgnoreCaseAndEmailVerificadoTrue(String email);
+    List<Influencer> findByEmailVerificadoTrueAndNomeIsNotNullOrderByNomeAsc();
+    List<Influencer> findByEmailIgnoreCase(String email);
+    List<Influencer> findByEmailIgnoreCaseAndEmailVerificadoFalse(String email);
 }

@@ -1,10 +1,19 @@
 package app.Influencer.models;
 
-import app.Adm.models.Categoria;
-
-import jakarta.persistence.*;
 import app.Adm.models.RedeSocial;
 import app.Adm.models.TipoUsuario;
+import app.Adm.models.Categoria;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +21,15 @@ import java.util.List;
 @Entity
 public class Influencer {
 
-    //Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
+    @Column(length = 2000)
+    private String bio;
+    private String fotoUrl;
     private int seguidores;
-    @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "influencer_id")
     private List<RedeSocial> redesSociais = new ArrayList<>();
     @ManyToMany
@@ -28,38 +39,28 @@ public class Influencer {
         inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
     private List<Categoria> categorias = new ArrayList<>();
+    @OneToMany(mappedBy = "influencer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pacote> pacotes = new ArrayList<>();
+    @OneToMany(mappedBy = "influencer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PortfolioImagem> portfolio = new ArrayList<>();
     private String email;
     private String senha;
 
     @Column(name = "tipo_usuario", nullable = false, updatable = false)
     private final TipoUsuario tipo = TipoUsuario.INFLUENCER;
     private boolean emailVerificado = false;
-    private String tokenVerificacao;
 
-    //Constutores
-
-   public Influencer(Influencer influencer){
-        this.id = influencer.getId();
-        this.nome = influencer.getNome();
-        this.redesSociais = new ArrayList<>(influencer.redesSociais); // Boa prática para clonar a lista
-        this.seguidores = influencer.getSeguidores();
-        this.categorias = new ArrayList<>(influencer.categorias); 
-        this.email = influencer.getEmail();
+    public Influencer() {
     }
-
-    public Influencer() {}
 
     public Influencer(String nome, int seguidores, List<RedeSocial> redesSociais, List<Categoria> categorias, String email, String senha) {
         this.nome = nome;
         this.seguidores = seguidores;
         this.redesSociais = new ArrayList<>(redesSociais);
-        this.categorias = new ArrayList<>(categorias);     
+        this.categorias = new ArrayList<>(categorias);
         this.email = email;
         this.senha = senha;
     }
-
-    //Funções
-
 
     public boolean isEmailVerificado() {
         return emailVerificado;
@@ -69,21 +70,6 @@ public class Influencer {
         this.emailVerificado = emailVerificado;
     }
 
-    public String getTokenVerificacao() {
-        return tokenVerificacao;
-    }
-
-    public void setTokenVerificacao(String tokenVerificacao) {
-        this.tokenVerificacao = tokenVerificacao;
-    }
-
-    public void setRedeSocials(String nome, int quantidadeDeSeguidores, String linkDoPerfil ) {
-        RedeSocial redeSocialNova = new RedeSocial(nome, quantidadeDeSeguidores, linkDoPerfil);
-        this.redesSociais.add(redeSocialNova);
-        this.seguidores += quantidadeDeSeguidores;
-    }
-
-    
     public void setSeguidores() {
         this.seguidores = redesSociais.stream()
                 .mapToInt(RedeSocial::getQuantidadeDeSeguidores)
@@ -117,6 +103,10 @@ public class Influencer {
         this.nome = nome;
     }
 
+    public String getBio() { return bio; }
+    public void setBio(String bio) { this.bio = bio; }
+    public String getFotoUrl() { return fotoUrl; }
+    public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
     public String getEmail() {
         return email;
     }
@@ -128,10 +118,6 @@ public class Influencer {
     public int getSeguidores() {
         return seguidores;
     }
-
-    public int getTotalSeguidores() {
-    return seguidores;
-}
 
     public void setSeguidores(int seguidores) {
         this.seguidores = seguidores;
@@ -152,4 +138,7 @@ public class Influencer {
     public void setCategorias(List<Categoria> categorias) {
         this.categorias = categorias;
     }
+
+    public List<Pacote> getPacotes() { return pacotes; }
+    public List<PortfolioImagem> getPortfolio() { return portfolio; }
 }

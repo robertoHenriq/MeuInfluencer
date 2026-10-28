@@ -56,10 +56,14 @@
 
     <div class="card card-custom shadow-lg p-4 rounded-4" style="width: 100%; max-width: 400px;">
         <h3 class="text-center mb-4 fw-bold text-danger">Entrar na Conta</h3>
+
+        <div th:if="${sucesso}" class="alert alert-success py-2 text-center" role="alert">
+            <span th:text="${sucesso}"></span>
+        </div>
         
         <!-- Alerta de Erro de Login (caso o Spring Security retorne erro) -->
         <div th:if="${param.error}" class="alert alert-danger py-2 text-center" role="alert">
-            E-mail ou senha inválidos.
+            E-mail ou senha inválidos, ou e-mail ainda não verificado.
         </div>
 
         <!-- Alerta de Logout -->

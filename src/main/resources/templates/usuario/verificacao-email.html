@@ -65,8 +65,12 @@
     <div class="card card-custom shadow-lg p-4 rounded-4 text-center" style="width: 100%; max-width: 420px;">
         <h3 class="fw-bold text-danger mb-3">Verifique seu E-mail</h3>
         <p class="text-muted small mb-4" style="color: #d1a1a1 !important;">
-            Enviamos um código de 4 dígitos para o seu e-mail cadastrado. Digite-o abaixo para ativar sua conta.
+            Enviamos um código de 4 dígitos para o e-mail informado. Confirme-o para concluir a criação da sua conta.
         </p>
+
+        <div th:if="${erro}" class="alert alert-danger py-2 text-center" role="alert">
+            <span th:text="${erro}"></span>
+        </div>
         
         <!-- Formulário de Verificação -->
         <form th:action="@{/auth/verificar-codigo}" method="POST" id="formVerificacao">

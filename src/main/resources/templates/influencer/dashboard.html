@@ -1,185 +1,207 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Influenciador - MeuInfluencer</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome para ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Meu painel | MeuInfluencer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #1a0f0f !important;
-            color: #f8d7da;
-        }
-        .sidebar-perfil {
-            background-color: #2c1515;
-            border-right: 1px solid #492020;
-            min-height: 100vh;
-        }
-        .avatar-placeholder {
-            width: 120px;
-            height: 120px;
-            background-color: #1a0f0f;
-            border: 2px dashed #5c2626;
-            color: #d1a1a1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            margin: 0 auto;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        .card-custom {
-            background-color: #2c1515;
-            border: 1px solid #492020;
-            color: #f8d7da;
-        }
-        .table-custom {
-            color: #f8d7da;
-        }
-        .table-custom th, .table-custom td {
-            background-color: #2c1515;
-            border-color: #492020;
-            color: #f8d7da;
-        }
-        .btn-custom {
-            background-color: #a71d2a;
-            border-color: #a71d2a;
-            color: #fff;
-        }
-        .btn-custom:hover {
-            background-color: #80141f;
-            border-color: #80141f;
-            color: #fff;
-        }
-        a {
-            color: #ff6b6b;
-        }
-        a:hover {
-            color: #ff8787;
-        }
+        :root { --ink:#f8d7da; --muted:#d1a1a1; --bg:#1a0f0f; --panel:#2c1515; --line:#492020; --red:#a71d2a; --bright:#ff6b6b; }
+        body { background:var(--bg); color:var(--ink); }
+        .navbar,.panel,.stat { background:var(--panel); border:1px solid var(--line); }
+        .navbar { position:sticky;top:0;z-index:10; }
+        .panel,.stat { border-radius:1rem; }
+        .form-control,.form-select { background:#1a0f0f;color:#fff;border-color:#5c2626; }
+        .form-control:focus,.form-select:focus { background:#1a0f0f;color:#fff;border-color:var(--bright);box-shadow:0 0 0 .2rem #a71d2a44; }
+        .form-control::placeholder { color:#b98d8d; }
+        .btn-custom { background:var(--red);border-color:var(--red);color:white; }
+        .btn-custom:hover { background:#80141f;color:white; }
+        .text-muted { color:var(--muted)!important; }
+        .section-link { color:var(--bright);text-decoration:none; }
+        .section-link:hover { color:white; }
+        .avatar { width:104px;height:104px;object-fit:cover;border-radius:50%;border:3px solid var(--red); }
+        .portfolio-img { width:100%;height:210px;object-fit:cover;border-radius:.7rem; }
+        .badge-status { background:#542127;color:#ffd9dc; }
+        .hall-shortcut { background:linear-gradient(110deg,#3b151a,#251213 72%);border:1px solid #a71d2a;border-radius:1rem;transition:transform .2s ease,box-shadow .2s ease; }
+        .hall-shortcut:hover { transform:translateY(-3px);box-shadow:0 12px 30px #0006; }
+        .hall-shortcut-icon { display:grid;place-items:center;width:52px;height:52px;border-radius:1rem;background:#a71d2a;color:#fff;font-size:1.35rem; }
+        .hall-shortcut-count { color:#ffb5b5;font-size:.85rem;animation:hallCountPulse 1.8s ease-in-out infinite; }
+        @keyframes hallCountPulse { 50% { text-shadow:0 0 12px #ff6b6b99;transform:scale(1.035); } }
+        .table { --bs-table-bg:transparent;--bs-table-color:var(--ink);--bs-table-border-color:var(--line); }
+        section { scroll-margin-top:85px; }
     </style>
 </head>
 <body>
-
-    <!-- Navbar Superior -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-danger border-opacity-25">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand fw-bold text-danger" href="#">MeuInfluencer <span class="small text-muted font-monospace">| Painel do Influenciador</span></a>
-            <div class="d-flex align-items-center">
-                <span class="text-light me-3">Logado como: <strong th:text="${influencerEmail}">influigner@email.com</strong></span>
-                <form th:action="@{/logout}" method="post" class="d-inline">
-                    <button type="submit" class="btn btn-outline-danger btn-sm">Sair</button>
-                </form>
-            </div>
+<nav class="navbar navbar-dark px-3 px-lg-5">
+    <a class="navbar-brand fw-bold text-danger" href="/">MeuInfluencer <small class="text-muted fw-normal">/ painel do criador</small></a>
+    <div class="d-flex align-items-center gap-3">
+        <span class="d-none d-md-inline text-muted" th:text="${influencer.email}">email</span>
+        <form th:action="@{/logout}" method="post"><button class="btn btn-outline-danger btn-sm">Sair</button></form>
+    </div>
+</nav>
+<main class="container py-4 py-lg-5">
+    <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+    <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <p class="text-danger text-uppercase small fw-bold mb-1">Seu espaço de trabalho</p>
+            <h1 class="h2 fw-bold mb-1" th:text="${influencer.nome != null ? 'Olá, ' + influencer.nome : 'Vamos montar seu perfil'}">Olá</h1>
+            <p class="text-muted mb-0">Mostre seu trabalho, defina seus preços e acompanhe as parcerias.</p>
         </div>
-    </nav>
-
-    <div class="container-fluid">
-        <div class="row">
-            
-            <!-- ABA LATERAL ESQUERDA: PERFIL DO INFLUENCER -->
-            <div class="col-md-3 p-4 sidebar-perfil text-center">
-                <h5 class="fw-bold text-danger mb-4">Meu Perfil</h5>
-                
-                <!-- Espaço reservado para a foto (em branco por enquanto) -->
-                <div class="mb-3">
-                    <div class="avatar-placeholder shadow-sm">
-                        <span>Sem Foto<br><small>120x120</small></span>
-                    </div>
-                </div>
-
-                <h5 class="fw-bold mb-1" th:text="${influencerNome != null ? influencerNome : 'Nome do Influenciador'}">Mariana Silva</h5>
-                <p class="text-muted small mb-3" style="color: #d1a1a1 !important;">@mariana.influencer</p>
-
-                <hr style="border-color: #5c2626;">
-
-                <div class="text-start small mb-4">
-                    <p class="mb-2"><i class="fa fa-instagram text-danger me-2"></i> <strong>Nicho:</strong> Moda & Beleza</p>
-                    <p class="mb-2"><i class="fa fa-tags text-danger me-2"></i> <strong>Valor por Story:</strong> R$ 150,00</p>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt text-danger me-2"></i> <strong>Região:</strong> Nordeste</p>
-                </div>
-
-                <button class="btn btn-outline-light btn-sm w-100 py-2 fw-semibold" style="border-color: #5c2626; color: #d1a1a1;">
-                    <i class="fa fa-edit me-1"></i> Editar Dados
-                </button>
-            </div>
-
-            <!-- CONTEÚDO PRINCIPAL (Direita): EMPRESAS E INTERESSES DE PARCERIA -->
-            <div class="col-md-9 p-4">
-                
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div>
-                        <h3 class="fw-bold text-danger">Empresas Parceiras</h3>
-                        <p class="text-muted small" style="color: #d1a1a1 !important;">Explore as empresas cadastradas e demonstre seu interesse em fechar parcerias para Stories.</p>
-                    </div>
-                </div>
-
-                <!-- Barra de Pesquisa de Empresas -->
-                <div class="input-group mb-4 shadow-sm">
-                    <input type="text" class="form-control bg-dark text-light border-secondary" placeholder="Buscar empresas por nome ou setor...">
-                    <button class="btn btn-outline-danger" type="button"><i class="fa fa-search"></i></button>
-                </div>
-
-                <!-- Tabela / Lista de Empresas Disponíveis -->
-                <div class="card card-influencer shadow-sm p-3 rounded-4">
-                    <h5 class="fw-bold mb-3 text-light">Empresas Disponíveis para Parceria</h5>
-                    
-                    <div class="table-responsive">
-                        <table class="table table-custom align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Empresa</th>
-                                    <th>Setor / Nicho</th>
-                                    <th>Média de Orçamento</th>
-                                    <th class="text-end">Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Exemplo de Linha 1 -->
-                                <tr>
-                                    <td>
-                                        <div class="fw-bold">Loja Bella Moda</div>
-                                        <small class="text-muted" style="color: #d1a1a1 !important;">E-commerce de roupas femininas</small>
-                                    </td>
-                                    <td>Moda / Varejo</td>
-                                    <td>R$ 200 - R$ 500 / story</td>
-                                    <td class="text-end">
-                                        <button class="btn btn-custom btn-sm px-3 fw-semibold">
-                                            <i class="fa fa-heart me-1"></i> Demonstrar Interesse
-                                        </button>
-                                    </td>
-                                </tr>
-                                <!-- Exemplo de Linha 2 -->
-                                <tr>
-                                    <td>
-                                        <div class="fw-bold">TechSolutions Brasil</div>
-                                        <small class="text-muted" style="color: #d1a1a1 !important;">Aplicativos e Serviços Digitais</small>
-                                    </td>
-                                    <td>Tecnologia</td>
-                                    <td>R$ 300 - R$ 800 / story</td>
-                                    <td class="text-end">
-                                        <button class="btn btn-custom btn-sm px-3 fw-semibold">
-                                            <i class="fa fa-heart me-1"></i> Demonstrar Interesse
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-            
-        </div>
+        <a class="btn btn-custom" href="#perfil"><i class="fa-solid fa-pen-to-square me-2"></i>Editar perfil</a>
+    </div>
+    <a class="hall-shortcut d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 p-lg-4 mb-4 text-decoration-none"
+       th:href="@{/hall}" aria-label="Explorar o Hall e enviar propostas para novos projetos">
+        <span class="d-flex align-items-center gap-3">
+            <span class="hall-shortcut-icon" aria-hidden="true"><i class="fa-solid fa-people-arrows-left-right"></i></span>
+            <span><strong class="d-block text-white">Explorar o Hall</strong><small class="text-muted">Encontre campanhas locais e mostre seu trabalho para empresas.</small></span>
+        </span>
+        <span class="d-flex align-items-center gap-3"><span class="hall-shortcut-count"><i class="fa-solid fa-bullhorn me-1"></i>12 projetos novos</span><i class="fa-solid fa-arrow-right text-danger" aria-hidden="true"></i></span>
+    </a>
+    <div class="row g-3 mb-4">
+        <div class="col-sm-4"><div class="stat p-3 h-100"><small class="text-muted">Seguidores informados</small><div class="fs-4 fw-bold" th:text="${#numbers.formatInteger(influencer.seguidores, 1, 'POINT')}">0</div></div></div>
+        <div class="col-sm-4"><div class="stat p-3 h-100"><small class="text-muted">Pacotes ativos</small><div class="fs-4 fw-bold" th:text="${#lists.size(pacotes.?[ativo])}">0</div></div></div>
+        <div class="col-sm-4"><div class="stat p-3 h-100"><small class="text-muted">Pedidos recebidos</small><div class="fs-4 fw-bold" th:text="${#lists.size(pedidos)}">0</div></div></div>
+    </div>
+    <div class="d-flex flex-wrap gap-3 border-bottom border-danger border-opacity-25 pb-3 mb-4">
+        <a class="section-link" href="#perfil">Perfil</a><a class="section-link" href="#pacotes">Meus pacotes</a>
+        <a class="section-link" href="#portfolio">Portfólio</a><a class="section-link" href="#pedidos">Pedidos</a>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <section id="perfil" class="panel p-3 p-lg-4 mb-4">
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <img class="avatar" th:if="${influencer.fotoUrl != null}" th:src="${influencer.fotoUrl}" alt="Foto de perfil">
+            <div class="avatar d-flex align-items-center justify-content-center fs-2 text-danger" th:if="${influencer.fotoUrl == null}"><i class="fa-regular fa-user"></i></div>
+            <div><h2 class="h4 mb-1">Seu perfil público</h2><p class="text-muted mb-0">Empresas verão estas informações na vitrine.</p></div>
+        </div>
+        <form th:action="@{/influencer/perfil}" method="post" enctype="multipart/form-data">
+            <div class="row g-3">
+                <div class="col-md-6"><label class="form-label">Nome público</label><input class="form-control" name="nome" required maxlength="120" th:value="${influencer.nome}" placeholder="Como as empresas conhecem você"></div>
+                <div class="col-md-6"><label class="form-label">Foto de perfil</label><input class="form-control" name="foto" type="file" accept="image/png,image/jpeg"><small class="text-muted">JPG ou PNG; até 5 MB.</small></div>
+                <div class="col-12"><label class="form-label">Apresentação</label><textarea class="form-control" name="bio" rows="3" maxlength="2000" placeholder="Conte sobre seu conteúdo, público e estilo..." th:text="${influencer.bio}"></textarea></div>
+                <div class="col-12"><label class="form-label">Categorias</label>
+                    <select class="form-select" name="categoriaIds" multiple size="4">
+                        <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nome}" th:selected="${influencer.categorias.contains(categoria)}"></option>
+                    </select><small class="text-muted">Use Ctrl ou Cmd para selecionar mais de uma.</small>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex align-items-center justify-content-between mb-2"><label class="form-label mb-0">Redes sociais</label><button class="btn btn-sm btn-outline-danger" type="button" id="adicionar-rede"><i class="fa-solid fa-plus me-1"></i>Adicionar rede</button></div>
+                    <div id="redes-container" class="d-grid gap-2">
+                        <div class="row g-2 align-items-center rede-row" th:each="rede : ${influencer.redesSociais}">
+                            <div class="col-md-3"><input class="form-control" name="redeNome" placeholder="Instagram" th:value="${rede.nome}"></div>
+                            <div class="col-md-3"><input class="form-control" name="redeSeguidores" type="number" min="0" placeholder="Seguidores" th:value="${rede.quantidadeDeSeguidores}"></div>
+                            <div class="col-md-5"><input class="form-control" name="redeLink" type="url" placeholder="https://..." th:value="${rede.linkDoPerfil}"></div>
+                            <div class="col-md-1"><button class="btn btn-outline-secondary w-100 remover-rede" type="button" aria-label="Remover rede"><i class="fa-solid fa-xmark"></i></button></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12"><button class="btn btn-custom"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar perfil</button></div>
+            </div>
+        </form>
+    </section>
+
+    <section id="pacotes" class="panel p-3 p-lg-4 mb-4">
+        <div class="mb-3"><h2 class="h4 mb-1">Pacotes de serviços</h2><p class="text-muted mb-0">Defina o escopo, preço e prazo do que você oferece.</p></div>
+        <form th:action="@{/influencer/pacotes}" method="post" class="row g-3 mb-4" id="form-pacote">
+            <input type="hidden" name="pacoteId" id="pacote-id">
+            <div class="col-md-6"><label class="form-label">Nome do pacote</label><input class="form-control" name="titulo" id="pacote-titulo" required maxlength="120" placeholder="Ex.: 1 Reel + 3 Stories"></div>
+            <div class="col-md-3"><label class="form-label">Preço (R$)</label><input class="form-control" name="preco" id="pacote-preco" type="number" min="0.01" step="0.01" required placeholder="250,00"></div>
+            <div class="col-md-3"><label class="form-label">Prazo (dias)</label><input class="form-control" name="prazoDias" id="pacote-prazo" type="number" min="1" max="90" value="7" required></div>
+            <div class="col-12"><label class="form-label">O que está incluído</label><textarea class="form-control" name="descricao" id="pacote-descricao" rows="2" maxlength="1500" required placeholder="Descreva as entregas e condições..."></textarea></div>
+            <div class="col-12 d-flex gap-2"><button class="btn btn-custom" id="salvar-pacote"><i class="fa-solid fa-plus me-2"></i>Salvar pacote</button><button class="btn btn-outline-light d-none" id="cancelar-edicao" type="button">Cancelar edição</button></div>
+        </form>
+        <div class="row g-3">
+            <div class="col-lg-6" th:each="pacote : ${pacotes}">
+                <article class="border border-danger border-opacity-25 rounded-3 p-3 h-100">
+                    <div class="d-flex justify-content-between gap-2"><div><h3 class="h6 fw-bold mb-1" th:text="${pacote.titulo}">Pacote</h3><span class="badge" th:classappend="${pacote.ativo ? ' text-bg-success' : ' text-bg-secondary'}" th:text="${pacote.ativo ? 'Ativo' : 'Pausado'}">Ativo</span></div><strong class="text-danger fs-5" th:text="${'R$ ' + #numbers.formatDecimal(pacote.preco, 1, 'POINT', 2, 'COMMA')}">R$ 0,00</strong></div>
+                    <p class="text-muted small my-2" th:text="${pacote.descricao}">Descrição</p><small class="text-muted" th:text="${'Prazo: ' + pacote.prazoDias + ' dias'}">Prazo</small>
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <button class="btn btn-sm btn-outline-light editar-pacote" type="button" th:attr="data-id=${pacote.id},data-titulo=${pacote.titulo},data-descricao=${pacote.descricao},data-preco=${pacote.preco},data-prazo=${pacote.prazoDias}"><i class="fa-solid fa-pen me-1"></i>Editar</button>
+                        <form th:action="@{/influencer/pacotes/{id}/status(id=${pacote.id})}" method="post"><input type="hidden" name="ativo" th:value="${!pacote.ativo}"><button class="btn btn-sm btn-outline-warning" th:text="${pacote.ativo ? 'Pausar' : 'Ativar'}">Pausar</button></form>
+                        <form th:action="@{/influencer/pacotes/{id}/excluir(id=${pacote.id})}" method="post" onsubmit="return confirm('Excluir este pacote?')"><button class="btn btn-sm btn-outline-danger">Excluir</button></form>
+                    </div>
+                </article>
+            </div>
+            <div class="col-12 text-muted" th:if="${#lists.isEmpty(pacotes)}">Você ainda não criou um pacote. Comece pelo formulário acima.</div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="panel p-3 p-lg-4 mb-4">
+        <div class="mb-3"><h2 class="h4 mb-1">Portfólio de imagens</h2><p class="text-muted mb-0">Compartilhe exemplos do seu trabalho com potenciais clientes.</p></div>
+        <form th:action="@{/influencer/portfolio}" method="post" enctype="multipart/form-data" class="row g-2 align-items-end mb-4">
+            <div class="col-md-6"><label class="form-label">Imagem</label><input class="form-control" type="file" name="imagem" accept="image/png,image/jpeg" required id="portfolio-file"></div>
+            <div class="col-md-4"><label class="form-label">Legenda (opcional)</label><input class="form-control" name="legenda" maxlength="200" placeholder="Campanha de verão"></div>
+            <div class="col-md-2"><button class="btn btn-custom w-100"><i class="fa-solid fa-upload me-1"></i>Enviar</button></div>
+            <div class="col-12"><img id="portfolio-preview" class="portfolio-img d-none" style="max-width:320px" alt="Prévia da imagem selecionada"></div>
+        </form>
+        <div class="row g-3">
+            <div class="col-sm-6 col-lg-4" th:each="imagem : ${portfolio}">
+                <div class="border border-danger border-opacity-25 rounded-3 p-2 h-100">
+                    <img class="portfolio-img" th:src="${imagem.url}" th:alt="${imagem.legenda}">
+                    <div class="d-flex justify-content-between align-items-center gap-2 p-2"><span class="small text-muted" th:text="${imagem.legenda}">Trabalho</span><form th:action="@{/influencer/portfolio/{id}/excluir(id=${imagem.id})}" method="post" onsubmit="return confirm('Remover esta imagem do portfólio?')"><button class="btn btn-sm btn-outline-danger" aria-label="Remover imagem"><i class="fa-solid fa-trash"></i></button></form></div>
+                </div>
+            </div>
+            <p class="text-muted" th:if="${#lists.isEmpty(portfolio)}">Seu portfólio ainda está vazio.</p>
+        </div>
+    </section>
+
+    <section id="pedidos" class="panel p-3 p-lg-4">
+        <div class="mb-3"><h2 class="h4 mb-1">Pedidos recebidos</h2><p class="text-muted mb-0">Aceite ou recuse solicitações e acompanhe as entregas.</p></div>
+        <div class="table-responsive" th:if="${!#lists.isEmpty(pedidos)}">
+            <table class="table align-middle"><thead><tr><th>Empresa</th><th>Trabalho</th><th>Preço</th><th>Status</th><th>Ações</th></tr></thead>
+                <tbody><tr th:each="pedido : ${pedidos}">
+                    <td th:text="${pedido.empresa.nome != null ? pedido.empresa.nome : pedido.empresa.email}">Empresa</td>
+                    <td><strong th:text="${pedido.pacoteTitulo}">Pacote</strong><div class="small text-muted" th:text="${pedido.pacoteDescricao}">Escopo contratado</div><div class="small mt-1" th:text="${pedido.briefing}">Briefing</div><div class="small" th:if="${pedido.entrega != null}" th:text="${pedido.entrega}"></div></td>
+                    <td th:text="${'R$ ' + #numbers.formatDecimal(pedido.precoCongelado, 1, 'POINT', 2, 'COMMA')}">R$ 0,00</td>
+                    <td><span class="badge badge-status" th:text="${pedido.status.descricao}">Status</span></td>
+                    <td><div class="d-flex flex-wrap gap-1">
+                        <form th:if="${pedido.status.name() == 'AGUARDANDO_ACEITE'}" th:action="@{/influencer/pedidos/{id}/aceitar(id=${pedido.id})}" method="post"><button class="btn btn-sm btn-success">Aceitar</button></form>
+                        <form th:if="${pedido.status.name() == 'AGUARDANDO_ACEITE'}" th:action="@{/influencer/pedidos/{id}/recusar(id=${pedido.id})}" method="post"><button class="btn btn-sm btn-outline-danger">Recusar</button></form>
+                        <form th:if="${pedido.status.name() == 'EM_PRODUCAO'}" th:action="@{/influencer/pedidos/{id}/entrega(id=${pedido.id})}" method="post" class="d-flex gap-1"><input class="form-control form-control-sm" name="entrega" required placeholder="Link ou detalhes da entrega"><button class="btn btn-sm btn-custom">Enviar</button></form>
+                    </div></td>
+                </tr></tbody>
+            </table>
+        </div>
+        <p class="text-muted mb-0" th:if="${#lists.isEmpty(pedidos)}">Quando uma empresa solicitar um pacote, o pedido aparecerá aqui.</p>
+    </section>
+</main>
+<script>
+    const networkContainer = document.getElementById('redes-container');
+    document.getElementById('adicionar-rede').addEventListener('click', () => {
+        const row = document.createElement('div');
+        row.className = 'row g-2 align-items-center rede-row';
+        row.innerHTML = '<div class="col-md-3"><input class="form-control" name="redeNome" placeholder="Instagram"></div><div class="col-md-3"><input class="form-control" name="redeSeguidores" type="number" min="0" placeholder="Seguidores"></div><div class="col-md-5"><input class="form-control" name="redeLink" type="url" placeholder="https://..."></div><div class="col-md-1"><button class="btn btn-outline-secondary w-100 remover-rede" type="button" aria-label="Remover rede"><i class="fa-solid fa-xmark"></i></button></div>';
+        networkContainer.appendChild(row);
+    });
+    networkContainer.addEventListener('click', event => {
+        if (event.target.closest('.remover-rede')) event.target.closest('.rede-row').remove();
+    });
+    const packageForm = document.getElementById('form-pacote');
+    const cancelEdit = document.getElementById('cancelar-edicao');
+    document.querySelectorAll('.editar-pacote').forEach(button => button.addEventListener('click', () => {
+        document.getElementById('pacote-id').value = button.dataset.id;
+        document.getElementById('pacote-titulo').value = button.dataset.titulo;
+        document.getElementById('pacote-descricao').value = button.dataset.descricao;
+        document.getElementById('pacote-preco').value = button.dataset.preco;
+        document.getElementById('pacote-prazo').value = button.dataset.prazo;
+        document.getElementById('salvar-pacote').innerHTML = '<i class="fa-solid fa-floppy-disk me-2"></i>Atualizar pacote';
+        cancelEdit.classList.remove('d-none');
+        packageForm.scrollIntoView({ behavior: 'smooth' });
+    }));
+    cancelEdit.addEventListener('click', () => {
+        packageForm.reset();
+        document.getElementById('pacote-id').value = '';
+        document.getElementById('salvar-pacote').innerHTML = '<i class="fa-solid fa-plus me-2"></i>Salvar pacote';
+        cancelEdit.classList.add('d-none');
+    });
+    document.getElementById('portfolio-file').addEventListener('change', event => {
+        const preview = document.getElementById('portfolio-preview');
+        if (event.target.files[0]) {
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.classList.remove('d-none');
+        } else preview.classList.add('d-none');
+    });
+</script>
 </body>
 </html>

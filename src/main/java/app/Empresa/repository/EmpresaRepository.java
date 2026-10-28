@@ -2,12 +2,12 @@ package app.Empresa.repository;
 
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import app.Empresa.models.Empresa;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface EmpresaRepository extends JpaRepository<Empresa, Integer>  {
- Empresa findByTokenVerificacao(String tokenVerificacao);
- Optional<Empresa> findByEmail(String email);
+public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
+    boolean existsByEmailIgnoreCaseAndEmailVerificadoTrue(String email);
+    Optional<Empresa> findByEmailIgnoreCase(String email);
+    Optional<Empresa> findByEmailIgnoreCaseAndEmailVerificadoTrue(String email);
+    Optional<Empresa> findByEmailIgnoreCaseAndEmailVerificadoFalse(String email);
 }

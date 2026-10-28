@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${influencer.nome + ' | MeuInfluencer'}">Perfil do criador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --ink:#f8d7da;--muted:#d1a1a1;--bg:#1a0f0f;--panel:#2c1515;--line:#492020;--red:#a71d2a;--bright:#ff6b6b; }
+        body { background:var(--bg);color:var(--ink); }.navbar,.panel { background:var(--panel);border:1px solid var(--line); }
+        .panel { border-radius:1rem; }.creator-avatar { height:128px;width:128px;object-fit:cover;border-radius:50%;border:3px solid var(--red); }
+        .portfolio-img { width:100%;height:220px;object-fit:cover;border-radius:.75rem; }.text-muted { color:var(--muted)!important; }
+        .btn-custom { background:var(--red);border-color:var(--red);color:white; }.btn-custom:hover { background:#80141f;color:white; }
+        .form-control,.form-select { background:#1a0f0f;color:white;border-color:#5c2626; }.form-control:focus,.form-select:focus { background:#1a0f0f;color:white;border-color:var(--bright); }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark px-3 px-lg-5"><a class="navbar-brand fw-bold text-danger" th:href="@{/empresa/dashboard}"><i class="fa-solid fa-arrow-left me-2"></i>Voltar à vitrine</a>
+    <form th:action="@{/logout}" method="post"><button class="btn btn-outline-danger btn-sm">Sair</button></form></nav>
+<main class="container py-4 py-lg-5">
+    <section class="panel p-4 p-lg-5 mb-4">
+        <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-4">
+            <img class="creator-avatar" th:if="${influencer.fotoUrl != null}" th:src="${influencer.fotoUrl}" th:alt="${influencer.nome}">
+            <div class="creator-avatar d-flex align-items-center justify-content-center fs-1 text-danger" th:if="${influencer.fotoUrl == null}"><i class="fa-regular fa-user"></i></div>
+            <div class="flex-grow-1 text-center text-md-start">
+                <p class="text-danger small text-uppercase fw-bold mb-1">Perfil de criador</p><h1 class="h2 fw-bold" th:text="${influencer.nome}">Nome</h1>
+                <p class="text-muted" th:text="${influencer.bio}">Apresentação</p>
+                <div class="d-flex flex-wrap justify-content-center justify-content-md-start gap-2 mb-3"><span class="badge text-bg-dark border border-danger border-opacity-25" th:each="categoria : ${influencer.categorias}" th:text="${categoria.nome}">Categoria</span></div>
+                <div class="d-flex flex-wrap justify-content-center justify-content-md-start gap-3">
+                    <span><i class="fa-solid fa-users text-danger me-1"></i><span th:text="${#numbers.formatInteger(influencer.seguidores,1,'POINT')}">0</span> seguidores</span>
+                    <a class="text-danger" th:each="rede : ${influencer.redesSociais}" th:href="${rede.linkDoPerfil}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square me-1"></i><span th:text="${rede.nome}">Rede</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="mb-4"><h2 class="h4 mb-3">Pacotes</h2><div class="row g-3">
+        <div class="col-md-6" th:each="pacote : ${pacotes}"><article class="panel p-4 h-100">
+            <div class="d-flex justify-content-between gap-2"><h3 class="h5" th:text="${pacote.titulo}">Pacote</h3><strong class="text-danger fs-5" th:text="${'R$ ' + #numbers.formatDecimal(pacote.preco,1,'POINT',2,'COMMA')}">R$ 0,00</strong></div>
+            <p class="text-muted" th:text="${pacote.descricao}">Descrição</p><p class="small">Prazo de entrega: <strong th:text="${pacote.prazoDias + ' dias'}">7 dias</strong></p>
+            <form th:action="@{/empresa/pedidos}" method="post" class="mt-3">
+                <input type="hidden" name="pacoteId" th:value="${pacote.id}">
+                <label class="form-label small">Briefing da campanha</label><textarea class="form-control mb-2" name="briefing" rows="3" maxlength="2000" required placeholder="Descreva objetivo, público e entregas desejadas"></textarea>
+                <button class="btn btn-custom w-100"><i class="fa-solid fa-paper-plane me-2"></i>Enviar convite</button>
+            </form>
+        </article></div>
+    </div></section>
+    <section><h2 class="h4 mb-3">Portfólio</h2><div class="row g-3">
+        <div class="col-sm-6 col-lg-4" th:each="imagem : ${portfolio}"><article class="panel p-2 h-100"><img class="portfolio-img" th:src="${imagem.url}" th:alt="${imagem.legenda}"><p class="small text-muted p-2 mb-0" th:text="${imagem.legenda}"></p></article></div>
+        <div class="col-12" th:if="${#lists.isEmpty(portfolio)}"><p class="text-muted">Este criador ainda não adicionou imagens ao portfólio.</p></div>
+    </div></section>
+    <p class="small text-muted text-center mt-4"><i class="fa-solid fa-circle-info me-1"></i>Esta versão permite testar pedidos; pagamento real ainda não está integrado.</p>
+</main>
+</body>
+</html>

@@ -1,36 +1,54 @@
 # Meu Influencer PB
 
-Plataforma de conexão entre pequenas empresas e criadores de conteúdo da Paraíba.
+Marketplace para conectar empresas a criadores de conteúdo.
 
-## 📸 Prévia do Sistema
+## Tecnologias
 
-![Tela do Sistema](src/main/resources/Captura-de-Tela-(6).png)
+- Java 22 e Spring Boot (Spring MVC, Spring Data JPA, Spring Security)
+- Thymeleaf e Bootstrap 5
+- PostgreSQL
 
-Sistema web desenvolvido para o gerenciamento de influenciadores digitais, empresas e suas respectivas redes sociais e nichos de mercado.
+## Funcionalidades
 
-🛠️ Tecnologias Utilizadas
-Backend: Java 17 com Spring Boot (Spring Data JPA / Hibernate)
+### Influenciadores
 
-Frontend: Thymeleaf integrado com Tailwind CSS para um design moderno e responsivo
+- Perfil editável com apresentação, foto, categorias e redes sociais.
+- Pacotes de serviços com descrição, preço e prazo configurados pelo criador.
+- Portfólio de até 20 imagens JPG/PNG, com tamanho máximo de 5 MB por imagem.
+- Pedidos recebidos com ações para aceitar, recusar e enviar a entrega.
+- O perfil só aparece na vitrine após a verificação do e-mail, preenchimento do nome e da rede social, e criação de um pacote ativo.
 
-Banco de Dados: PostgreSQL
+### Empresas
 
-Controle de Versão: Git / GitHub
+- Perfil editável com nome, CNPJ, segmento, site, apresentação e logo.
+- Vitrine com filtros por texto, categoria, seguidores e preço.
+- Perfil público do criador com portfólio e pacotes disponíveis.
+- Envio de briefing, acompanhamento de pedidos, aprovação de entrega e abertura de disputa.
 
-🏛️ Arquitetura e Entidades Principais
-O projeto segue o padrão MVC (Model-View-Controller), com as páginas organizadas em subpastas (/adm/ e /influencer/) para melhor manutenção:
+### Pedidos
 
-Influencer: Armazena os dados principais do influenciador.
+- Fluxo: aguardando resposta → aguardando pagamento → em produção → entregue → concluído.
+- O pedido preserva cópias do nome, escopo, preço e prazo do pacote no momento da contratação.
+- Cada parte só pode consultar ou alterar pedidos associados à própria conta; as ações também validam o status atual.
+- O botão de pagamento é apenas uma simulação de desenvolvimento: não há cobrança, custódia ou integração com o Mercado Pago.
 
-Empresa: Gerencia os dados das marcas parceiras.
+### Hall de parcerias
 
-RedeSocial: Vincula as diferentes plataformas de atuação do influenciador.
+- A rota autenticada `/hall` adapta a aba inicial ao papel da conta e só permite acesso a empresas e influenciadores com e-mail verificado.
+- A vitrine demonstra campanhas e perfis locais com filtros no cliente e endpoints GET; empresas podem publicar projetos, receber propostas e convidar perfis, enquanto influenciadores podem enviar propostas e favoritar itens.
+- Os exemplos de projetos e influenciadores, favoritos, propostas e projetos publicados ficam em memória e são perdidos ao reiniciar a aplicação. O contador de custódia e a atividade ao vivo são demonstrações: nenhum pagamento ou notificação real é processado.
+- Os endpoints de ação verificam a role, consultam a conta verificada no banco e, nas operações empresariais, validam se o projeto pertence ao e-mail autenticado. O Hall não cria um fluxo próprio de login.
+- Os dashboards têm um atalho para `/hall`. A taxa exibida no resumo de proposta é configurada em `TAXA_PLATAFORMA` no JavaScript e não representa uma comissão cobrada.
+- APIs de leitura: `GET /hall/api/projetos`, `GET /hall/api/influenciadores` e `GET /hall/api/propostas`. Ações: `POST /hall/api/company/projetos`, `POST /hall/api/influencer/propostas`, `POST /hall/api/company/propostas/{id}/status`, `POST /hall/api/company/projetos/{projectId}/convites/{influencerId}` e `POST /hall/api/favoritos/{id}`.
 
-Categoria (Nicho): Segmenta os influenciadores por área de atuação (ex: Tecnologia, Moda, Fitness).
+Entidades sugeridas para substituir os dados demonstrativos:
 
-⚙️ Principais Funcionalidades Implementadas
-Relacionamento Many-to-Many: Associação flexível entre influenciadores e múltiplas categorias através da tabela de junção influencer_categoria.
+- `Projeto`: id, empresa, título, briefing, categoria, rede social, orçamento mínimo/máximo, prazo, faixa de seguidores, bairro, status e datas.
+- `Proposta`: id, projeto, influenciador, valor, prazo, mensagem, link do portfólio, status e datas.
+- `Favorito`: id, usuário proprietário (tipo e id, ou vínculo a uma entidade comum), tipo de alvo, id do projeto/influenciador e data de criação.
 
-Painel Administrativo (/adm): Módulo restrito onde administradores cadastram e gerenciam as categorias oficiais do sistema. Essa restrição evita a duplicação de dados e mantém a consistência do banco de dados.
+## Imagens
 
-Dashboard do Influenciador (/influencer): Área voltada para listagem, navegação e gerenciamento dos perfis cadastrados.
+Fotos de perfil, logos e imagens de portfólio são salvas localmente em `uploads/`, diretório ignorado pelo Git. Para produção, use armazenamento persistente compartilhado antes de executar múltiplas instâncias da aplicação.
+
+As novas tabelas são criadas/atualizadas pelo Hibernate de acordo com a configuração `ddl-auto` do projeto.

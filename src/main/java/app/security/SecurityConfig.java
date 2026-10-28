@@ -12,46 +12,34 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        
         http
-        
-            .csrf(csrf -> csrf.disable()) // Desativa CSRF para facilitar formulários locais
-
             .authorizeHttpRequests(auth -> auth
-                // Libera todas as rotas públicas que você está usando no sistema:
                 .requestMatchers(
-                    "/", 
-                    "/cadastro", 
-                    "/auth/**", 
-                    "/empresa", 
-                    "/influencer/**", 
-                    "/como-funciona", 
-                    "/css/**", 
-                    "/verificar-email",
-                    "verificacao-email",
-                    "verificacao",
-                    "/js/**", 
-                    "/dashboard",
-                    "/images/**"
+                    "/", "/cadastro", "/login", "/auth/**", "/como-funciona",
+                    "/css/**", "/js/**", "/images/**", "/uploads/**"
                 ).permitAll()
-                // Qualquer outra página exigirá login
+                .requestMatchers("/hall/api/influencer/**").hasRole("INFLUENCER")
+                .requestMatchers("/hall/api/company/**").hasRole("EMPRESA")
+                .requestMatchers("/hall/api/propostas/**").hasRole("EMPRESA")
+                .requestMatchers("/influencer/**").hasRole("INFLUENCER")
+                .requestMatchers("/empresa/**").hasRole("EMPRESA")
+                .requestMatchers("/adm/**").hasRole("ADMIN")
+                .requestMatchers("/hall", "/hall/").hasAnyRole("INFLUENCER", "EMPRESA")
+                .requestMatchers("/hall/api/**").hasAnyRole("INFLUENCER", "EMPRESA")
+                .requestMatchers("/dashboard").authenticated()
                 .anyRequest().authenticated()
             )
+            .csrf(csrf -> csrf.disable())
             .formLogin(form -> form
-                .loginPage("/login") // Se criar uma página de login personalizada depois
-                .permitAll()
-                .defaultSuccessUrl("/dashboard", true) // Para onde vai após logar com sucesso
+                .loginPage("/login")
+                .defaultSuccessUrl("/dashboard", true)
                 .permitAll()
             )
-                .sessionManagement(session -> session
-                .maximumSessions(1) // Opcional: limita a 1 sessão ativa por usuário
-                .expiredUrl("/login?expired=true") // Redireciona para o login se a sessão expirar
+            .sessionManagement(session -> session
+                .maximumSessions(1)
+                .expiredUrl("/login?expired=true")
             );
 
         return http.build();
     }
-
-    
-
 }

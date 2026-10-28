@@ -1,36 +1,25 @@
 package app.Adm.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import app.Adm.models.Categoria;
-
 import app.Adm.repositorys.CategoriaRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoriaService {
-    
-    @Autowired 
-    private CategoriaRepository categoriaRepository;
 
-    public CategoriaService() {}
+    private final CategoriaRepository categoriaRepository;
 
-    public void adicionarCategoria(String nome){
-        categoriaRepository.save(new app.Adm.models.Categoria(nome));
+    public CategoriaService(CategoriaRepository categoriaRepository) {
+        this.categoriaRepository = categoriaRepository;
     }
 
-    public void removerCategoria(Integer id){
-        categoriaRepository.deleteById(id);
+    public void adicionarCategoria(String nome) {
+        categoriaRepository.save(new Categoria(nome));
     }
 
-    public void editarCategoria(Integer id, String nome){
-        if(categoriaRepository.existsById(id)){
-            categoriaRepository.deleteById(id);
-            adicionarCategoria(nome);
-        }
-    }
-
-    public java.util.List<app.Adm.models.Categoria> listarCategorias(){
+    public List<Categoria> listarCategorias() {
         return categoriaRepository.findAll();
     }
-
 }

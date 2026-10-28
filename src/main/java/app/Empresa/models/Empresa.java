@@ -20,6 +20,11 @@ public class Empresa {
     private String nome;
     
     private String cnpj;
+    private String segmento;
+    private String site;
+    @Column(length = 2000)
+    private String descricao;
+    private String logoUrl;
     
     @Column(name = "valor_da_publi", nullable = false)
     private BigDecimal saldo = new BigDecimal("0.00");
@@ -46,7 +51,6 @@ public class Empresa {
     private List<RedeSocial> redesSociais = new ArrayList<>();
 
     private boolean emailVerificado = false;
-    private String tokenVerificacao;
 
 
     public void setSenha(String senha) {
@@ -76,14 +80,6 @@ public class Empresa {
         this.emailVerificado = emailVerificado;
     }
 
-    public String getTokenVerificacao() {
-        return tokenVerificacao;
-    }
-
-    public void setTokenVerificacao(String tokenVerificacao) {
-        this.tokenVerificacao = tokenVerificacao;
-    }
-
     public TipoUsuario getTipo() {
         return tipo;
     }
@@ -108,6 +104,14 @@ public class Empresa {
         this.nome = nome;
     }
 
+    public String getSegmento() { return segmento; }
+    public void setSegmento(String segmento) { this.segmento = segmento; }
+    public String getSite() { return site; }
+    public void setSite(String site) { this.site = site; }
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public String getLogoUrl() { return logoUrl; }
+    public void setLogoUrl(String logoUrl) { this.logoUrl = logoUrl; }
     public String getCnpj() {
         return cnpj;
     }

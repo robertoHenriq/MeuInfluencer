@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#1a0f0f">
+    <title>Hall de parcerias | MeuInfluencer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/hall.css}">
+</head>
+<body th:attr="data-role=${tipoPerfil},data-default-tab=${abaInicial}">
+<header th:replace="~{fragments/hall-fragments :: header(${perfil}, ${dashboardUrl})}"></header>
+
+<main class="hall-shell">
+    <section class="hall-hero" aria-labelledby="hall-title">
+        <div class="hero-copy">
+            <span class="eyebrow"><span class="live-dot"></span> Conexões locais, oportunidades reais</span>
+            <h1 id="hall-title">Seu próximo projeto <span>começa aqui.</span></h1>
+            <p th:if="${tipoPerfil == 'INFLUENCER'}">Encontre marcas da sua cidade, apresente sua ideia e transforme sua influência em parceria.</p>
+            <p th:if="${tipoPerfil == 'EMPRESA'}">Descubra criadores locais, publique uma campanha e receba propostas alinhadas à sua marca.</p>
+            <div class="hero-actions">
+                <button th:if="${tipoPerfil == 'EMPRESA'}" class="btn-primary-hall" type="button" data-bs-toggle="modal" data-bs-target="#publish-modal">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i> Publicar projeto
+                </button>
+                <a th:if="${tipoPerfil == 'INFLUENCER'}" class="btn-primary-hall text-decoration-none" th:href="@{/influencer/dashboard#pacotes}">
+                    <i class="fa-solid fa-box-open" aria-hidden="true"></i> Criar meu pacote
+                </a>
+                <span class="hero-trust"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Parcerias com pagamento protegido</span>
+            </div>
+        </div>
+        <div class="hero-illustration" aria-hidden="true">
+            <span class="orbit orbit-one"></span><span class="orbit orbit-two"></span>
+            <span class="orbit-icon orbit-shop"><i class="fa-solid fa-store"></i></span>
+            <span class="orbit-icon orbit-user"><i class="fa-solid fa-user-astronaut"></i></span>
+            <span class="orbit-icon orbit-heart"><i class="fa-solid fa-heart"></i></span>
+            <span class="orbit-center"><i class="fa-solid fa-handshake"></i></span>
+        </div>
+    </section>
+
+    <section class="stats-grid" aria-label="Resumo do Hall">
+        <article class="stat-card"><span class="stat-icon"><i class="fa-solid fa-briefcase"></i></span><div><small>Projetos abertos</small><strong class="count-up" th:attr="data-count=${contadores.projetos}">0</strong><span>oportunidades para hoje</span></div></article>
+        <article class="stat-card"><span class="stat-icon"><i class="fa-solid fa-users"></i></span><div><small>Influenciadores ativos</small><strong class="count-up" th:attr="data-count=${contadores.influenciadores}">0</strong><span>criadores da região</span></div></article>
+        <article class="stat-card stat-protected"><span class="stat-icon"><i class="fa-solid fa-lock"></i></span><div><small>Em custódia simulada</small><strong><span class="currency">R$</span><span class="count-up" th:attr="data-count=${contadores.custodia}">0</span></strong><span>exemplo · nenhuma cobrança real</span></div></article>
+    </section>
+
+    <section class="hall-workspace" aria-label="Explorar oportunidades">
+        <div class="workspace-heading">
+            <div><span class="eyebrow">Explore o Hall</span><h2>Parcerias que movimentam a cidade</h2><p>Encontre a combinação certa para crescer junto.</p></div>
+            <button class="filter-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters-drawer" aria-controls="filters-drawer"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Filtros <span class="filter-active-count" id="active-filter-count">0</span></button>
+        </div>
+
+        <nav th:replace="~{fragments/hall-fragments :: navigation(${abaInicial}, ${tipoPerfil})}"></nav>
+
+        <div class="filter-bar" id="desktop-filters" aria-label="Filtros">
+            <label class="filter-control filter-category"><span>Categoria</span><select id="filter-category"><option value="">Todas</option><option>Gastronomia</option><option>Beleza</option><option>Fitness</option><option>Moda</option><option>Pets</option><option>Bem-estar</option><option>Lifestyle</option><option>Família</option></select></label>
+            <label class="filter-control"><span>Rede social</span><select id="filter-network"><option value="">Todas</option><option>Instagram</option><option>TikTok</option><option>YouTube</option></select></label>
+            <label class="filter-control filter-budget"><span>Orçamento: <b id="budget-label">até R$ 3.500</b></span><input id="filter-budget" type="range" min="300" max="3500" step="100" value="3500" aria-label="Orçamento máximo"></label>
+            <label class="filter-control"><span>Seguidores</span><select id="filter-followers"><option value="">Qualquer faixa</option><option value="0-10000">Até 10 mil</option><option value="10000-25000">10 a 25 mil</option><option value="25000-50000">25 a 50 mil</option></select></label>
+            <label class="filter-control"><span>Bairro</span><select id="filter-neighborhood"><option value="">Toda a cidade</option><option>Centro</option><option>Vila Nova</option><option>Jardim América</option><option>Jardim Paulista</option><option>Boa Vista</option><option>Vila Aurora</option><option>Jardim Europa</option><option>Vila Redentora</option></select></label>
+            <label class="filter-control"><span>Prazo máximo</span><select id="filter-deadline"><option value="">Qualquer prazo</option><option value="7">Até 7 dias</option><option value="14">Até 14 dias</option><option value="30">Até 30 dias</option></select></label>
+            <label class="filter-control"><span>Ordenar por</span><select id="filter-sort"><option value="recentes">Mais recentes</option><option value="orcamento-desc">Maior orçamento</option><option value="prazo">Menor prazo</option><option value="propostas">Menos propostas</option><option value="nota">Melhor avaliados</option><option value="preco">Menor preço</option><option value="seguidores">Mais seguidores</option></select></label>
+            <button class="clear-filters" type="button" id="clear-filters">Limpar</button>
+        </div>
+
+        <section id="panel-projetos" class="hall-panel" data-panel="projetos" aria-label="Projetos de empresas">
+            <div class="list-heading"><div><h3>Projetos das empresas</h3><p>Campanhas abertas procurando influenciadores da região.</p></div><span id="project-result-count" class="result-count"></span></div>
+            <div id="project-list" class="card-grid" aria-live="polite"></div>
+        </section>
+
+        <section id="panel-influenciadores" class="hall-panel" data-panel="influenciadores" aria-label="Influenciadores disponíveis" hidden>
+            <div class="list-heading"><div><h3>Influenciadores disponíveis</h3><p>Talentos locais, com pacotes e preços transparentes.</p></div><span id="influencer-result-count" class="result-count"></span></div>
+            <div id="influencer-list" class="card-grid influencer-grid" aria-live="polite"></div>
+        </section>
+
+        <section id="panel-propostas" class="hall-panel" data-panel="propostas" aria-label="Propostas recebidas" hidden>
+            <div class="list-heading"><div><h3>Propostas recebidas</h3><p>Compare as propostas enviadas para seus projetos.</p></div><button id="compare-button" class="btn-outline-hall" type="button" disabled><i class="fa-solid fa-code-compare" aria-hidden="true"></i> Comparar (<span id="compare-count">0</span>/3)</button></div>
+            <div id="proposal-list" class="proposal-list" aria-live="polite"></div>
+        </section>
+    </section>
+
+    <section class="how-it-works" aria-labelledby="how-title">
+        <div class="section-title"><span class="eyebrow">Simples e transparente</span><h2 id="how-title">Do primeiro oi à parceria concluída</h2><p>O pagamento é simulado nesta versão de demonstração.</p></div>
+        <ol class="steps-track">
+            <li><span><i class="fa-solid fa-bullhorn"></i></span><strong>Publicar</strong><small>Descreva sua campanha</small></li>
+            <li><span><i class="fa-solid fa-comments"></i></span><strong>Receber propostas</strong><small>Compare perfis e ideias</small></li>
+            <li><span><i class="fa-solid fa-lock"></i></span><strong>Pagar em custódia</strong><small>Fluxo demonstrativo</small></li>
+            <li><span><i class="fa-solid fa-camera"></i></span><strong>Entregar</strong><small>Conteúdo e comprovantes</small></li>
+            <li><span><i class="fa-solid fa-circle-check"></i></span><strong>Aprovar</strong><small>Revise a entrega</small></li>
+            <li><span><i class="fa-solid fa-hand-holding-dollar"></i></span><strong>Liberar</strong><small>Após a aprovação</small></li>
+        </ol>
+    </section>
+</main>
+
+<div class="offcanvas offcanvas-end hall-offcanvas" tabindex="-1" id="filters-drawer" aria-labelledby="filters-title">
+    <div class="offcanvas-header"><h2 id="filters-title" class="offcanvas-title">Filtros</h2><button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Fechar"></button></div>
+    <div class="offcanvas-body" id="mobile-filter-controls"></div>
+    <div class="offcanvas-footer"><button class="btn-primary-hall w-100" type="button" data-bs-dismiss="offcanvas">Ver resultados</button></div>
+</div>
+
+<div class="modal fade hall-modal" id="details-modal" tabindex="-1" aria-labelledby="details-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content">
+        <div class="modal-header"><div><span class="eyebrow" id="details-eyebrow">Detalhes</span><h2 class="modal-title" id="details-title"></h2></div><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar detalhes"></button></div>
+        <div class="modal-body" id="details-body"></div><div class="modal-footer" id="details-actions"></div>
+    </div></div>
+</div>
+
+<div class="modal fade hall-modal" id="proposal-modal" tabindex="-1" aria-labelledby="proposal-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+        <div class="modal-header"><div><span class="eyebrow">Sua próxima parceria</span><h2 class="modal-title" id="proposal-title">Enviar proposta</h2><p id="proposal-project-name" class="mb-0 text-muted"></p></div><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+        <form id="proposal-form"><div class="modal-body">
+            <input id="proposal-project-id" type="hidden">
+            <label class="form-label" for="proposal-amount">Valor da proposta (R$)</label><input id="proposal-amount" class="form-control hall-input" type="number" min="1" step="0.01" required>
+            <label class="form-label mt-3" for="proposal-deadline">Prazo para entrega (dias)</label><input id="proposal-deadline" class="form-control hall-input" type="number" min="1" max="90" value="7" required>
+            <label class="form-label mt-3" for="proposal-message">Mensagem para a empresa</label><textarea id="proposal-message" class="form-control hall-input" rows="4" maxlength="1200" required placeholder="Conte como você pode contribuir com a campanha."></textarea>
+            <label class="form-label mt-3" for="proposal-portfolio">Link do portfólio (opcional)</label><input id="proposal-portfolio" class="form-control hall-input" type="url" maxlength="500" placeholder="https://">
+            <div class="proposal-summary"><div><span>Taxa da plataforma <small id="fee-percent"></small></span><strong id="proposal-fee">R$ 0,00</strong></div><div><span>Você recebe</span><strong id="proposal-net">R$ 0,00</strong></div></div>
+        </div><div class="modal-footer"><button type="button" class="btn-outline-hall" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn-primary-hall"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Enviar proposta</button></div></form>
+    </div></div>
+</div>
+
+<div class="modal fade hall-modal" id="publish-modal" tabindex="-1" aria-labelledby="publish-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content">
+        <div class="modal-header"><div><span class="eyebrow">Para sua empresa</span><h2 class="modal-title" id="publish-title">Publicar projeto</h2></div><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+        <div class="publish-progress" role="progressbar" aria-label="Progresso da publicação" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1"><span id="publish-progress-bar"></span></div>
+        <form id="publish-form" novalidate>
+            <div class="modal-body">
+                <div class="publish-step" data-step="1">
+                    <h3>Conte sobre a campanha</h3>
+                    <label class="form-label" for="publish-title-input">Título do projeto</label><input id="publish-title-input" class="form-control hall-input" name="titulo" maxlength="120" required placeholder="Ex.: Experimente nosso novo menu">
+                    <div class="row g-3 mt-1"><div class="col-md-6"><label class="form-label" for="publish-category">Categoria</label><select id="publish-category" name="categoria" class="form-select hall-input" required><option value="">Selecione</option><option>Gastronomia</option><option>Beleza</option><option>Fitness</option><option>Moda</option><option>Pets</option><option>Bem-estar</option><option>Lifestyle</option></select></div><div class="col-md-6"><label class="form-label" for="publish-network">Rede social</label><select id="publish-network" name="rede" class="form-select hall-input" required><option>Instagram</option><option>TikTok</option><option>YouTube</option></select></div></div>
+                    <label class="form-label mt-3" for="publish-description">Briefing</label><textarea id="publish-description" name="descricao" class="form-control hall-input" rows="4" maxlength="1500" required placeholder="O que você quer divulgar e qual conteúdo espera?"></textarea>
+                </div>
+                <div class="publish-step" data-step="2" hidden>
+                    <h3>Defina o investimento e o prazo</h3>
+                    <div class="row g-3"><div class="col-md-6"><label class="form-label" for="publish-budget">Orçamento total (R$)</label><input id="publish-budget" name="orcamento" class="form-control hall-input" type="number" min="1" step="0.01" required></div><div class="col-md-6"><label class="form-label" for="publish-deadline">Prazo para entrega (dias)</label><input id="publish-deadline" name="prazoDias" class="form-control hall-input" type="number" min="1" max="90" value="14" required></div></div>
+                    <div class="row g-3 mt-1"><div class="col-md-6"><label class="form-label" for="publish-followers-min">Seguidores a partir de</label><input id="publish-followers-min" name="seguidoresMin" class="form-control hall-input" type="number" min="0" value="1000" required></div><div class="col-md-6"><label class="form-label" for="publish-followers-max">Até seguidores</label><input id="publish-followers-max" name="seguidoresMax" class="form-control hall-input" type="number" min="0" value="50000" required></div></div>
+                    <label class="form-label mt-3" for="publish-neighborhood">Bairro</label><input id="publish-neighborhood" name="bairro" class="form-control hall-input" maxlength="80" required placeholder="Centro">
+                </div>
+                <div class="publish-step" data-step="3" hidden>
+                    <h3>Revise antes de publicar</h3><p class="text-muted">O card de pré-visualização atualiza enquanto você preenche.</p>
+                    <article class="project-card preview-card"><div class="project-card-top"><span id="preview-category" class="category-pill">Categoria</span><span class="new-badge">Prévia</span></div><h4 id="preview-title">Título do projeto</h4><p id="preview-company" class="company-line"></p><p id="preview-description" class="project-description"></p><div class="project-meta"><span><i class="fa-solid fa-coins"></i><b id="preview-budget">Defina o orçamento</b></span><span><i class="fa-regular fa-clock"></i><b id="preview-deadline">Prazo</b></span></div></article>
+                    <p class="demo-notice mt-3"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Esta publicação é demonstrativa e fica em memória até a aplicação reiniciar.</p>
+                </div>
+            </div>
+            <div class="modal-footer publish-controls"><button type="button" id="publish-previous" class="btn-outline-hall" hidden>Voltar</button><span class="step-indicator" id="publish-step-label">Etapa 1 de 3</span><button type="button" id="publish-next" class="btn-primary-hall">Continuar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button><button type="submit" id="publish-submit" class="btn-primary-hall" hidden><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Publicar projeto</button></div>
+        </form>
+    </div></div>
+</div>
+
+<div class="modal fade hall-modal" id="compare-modal" tabindex="-1" aria-labelledby="compare-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl"><div class="modal-content"><div class="modal-header"><h2 class="modal-title" id="compare-title">Comparar propostas</h2><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button></div><div class="modal-body"><div id="comparison-grid" class="comparison-grid"></div></div></div></div>
+</div>
+
+<div id="toast-region" class="toast-region" role="status" aria-live="polite" aria-atomic="true"></div>
+<div id="hall-skeleton" class="hall-skeleton" aria-label="Carregando oportunidades" role="status"><span class="visually-hidden">Carregando oportunidades...</span><div class="skeleton-row"><i></i><i></i><i></i></div><div class="skeleton-row"><i></i><i></i><i></i></div></div>
+
+<script th:inline="javascript">
+    window.HALL_INITIAL_DATA = {
+        projects: /*[[${projetos}]]*/ [],
+        influencers: /*[[${influenciadores}]]*/ [],
+        proposals: /*[[${propostas}]]*/ [],
+        profile: /*[[${perfil}]]*/ {},
+        influencerId: /*[[${perfilInfluencerId}]]*/ null,
+        counters: /*[[${contadores}]]*/ {}
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/hall.js}" defer></script>
+</body>
+</html>

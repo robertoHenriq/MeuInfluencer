@@ -1,10 +1,11 @@
 package app.Adm.controllers;
 
+import app.Adm.exceptions.EmailJaCadastradoException;
+import app.Adm.models.CadastroPendente;
+import app.Adm.models.TipoUsuario;
 import app.Adm.services.AuthService;
-import app.Empresa.models.Empresa;
-import app.Influencer.models.Influencer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,55 +15,91 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private static final String CADASTRO_PENDENTE_SESSION_KEY = "cadastroPendente";
 
-    // Rota para processar o cadastro enviado pelo HTML
+    private final AuthService authService;
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthController(AuthService authService, PasswordEncoder passwordEncoder) {
+        this.authService = authService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @PostMapping("/auth/registrar")
     public String registrar(@RequestParam("email") String email,
                             @RequestParam("senha") String senha,
                             @RequestParam("tipoUsuario") String tipoUsuario,
-                            RedirectAttributes redirectAttributes) { // Apenas uma variável aqui!
-        
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String senhaCriptografada = encoder.encode(senha);
-        
-        if ("INFLUENCER".equals(tipoUsuario)) {
-            Influencer influencer = new Influencer();
-            influencer.setEmail(email);
-            authService.registrarInfluencer(influencer, senhaCriptografada);
-            
-        } else if ("EMPRESA".equals(tipoUsuario)) {
-            Empresa empresa = new Empresa();
-            empresa.setEmail(email);
-            authService.registrarEmpresa(empresa, senhaCriptografada);
+                            HttpSession session,
+                            RedirectAttributes redirectAttributes) {
+        if (email.isBlank() || senha.isBlank()) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Informe um e-mail e uma senha.");
+            return "redirect:/cadastro";
         }
 
-        // Usando a mesma variável unificada para enviar os dados para o HTML
-        redirectAttributes.addFlashAttribute("mensagemSucesso", "Cadastro realizado! Um e-mail com as instruções foi enviado.");
+        TipoUsuario tipo;
+        try {
+            tipo = TipoUsuario.valueOf(tipoUsuario);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Tipo de usuário inválido.");
+            return "redirect:/cadastro";
+        }
+        if (tipo != TipoUsuario.EMPRESA && tipo != TipoUsuario.INFLUENCER) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Tipo de usuário inválido.");
+            return "redirect:/cadastro";
+        }
 
-        return "redirect:/auth/verificar-tela"; 
+        try {
+            CadastroPendente cadastroPendente = authService.iniciarCadastro(
+                    email, passwordEncoder.encode(senha), tipo);
+            session.setAttribute(CADASTRO_PENDENTE_SESSION_KEY, cadastroPendente);
+        } catch (EmailJaCadastradoException e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", e.getMessage());
+            return "redirect:/cadastro";
+        }
+
+        redirectAttributes.addFlashAttribute(
+                "mensagemSucesso", "Enviamos um código para seu e-mail. Confirme-o para concluir o cadastro.");
+        return "redirect:/auth/verificar-tela";
     }
 
-
-    // Rota que exibe a tela de digitar o código de 4 dígitos
     @GetMapping("/auth/verificar-tela")
-    public String exibirTelaVerificacao() {
-        return "usuario/verificacao-email"; // Nome do seu arquivo HTML da tela de verificação (ex: verificacao-email.html)
+    public String exibirTelaVerificacao(HttpSession session, RedirectAttributes redirectAttributes) {
+        if (session.getAttribute(CADASTRO_PENDENTE_SESSION_KEY) == null) {
+            redirectAttributes.addFlashAttribute(
+                    "mensagemErro", "Inicie um cadastro para solicitar o código de verificação.");
+            return "redirect:/cadastro";
+        }
+        return "usuario/verificacao-email";
     }
 
-    // Rota que recebe os 4 dígitos preenchidos na tela
     @PostMapping("/auth/verificar-codigo")
     public String verificarCodigo(@RequestParam("codigo") String codigo,
+                                  HttpSession session,
                                   RedirectAttributes redirectAttributes) {
-        
-        boolean verificado = authService.verificarCodigo(codigo);
+        Object cadastroPendente = session.getAttribute(CADASTRO_PENDENTE_SESSION_KEY);
+        if (!(cadastroPendente instanceof CadastroPendente pendente)) {
+            redirectAttributes.addFlashAttribute(
+                    "mensagemErro", "Sua solicitação de cadastro expirou. Cadastre-se novamente.");
+            return "redirect:/cadastro";
+        }
 
-        if (!verificado) {
+        if (codigo == null || !codigo.matches("\\d{4}")) {
             redirectAttributes.addFlashAttribute("erro", "Código inválido. Tente novamente.");
             return "redirect:/auth/verificar-tela";
         }
 
+        try {
+            authService.concluirCadastro(pendente, codigo);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
+            return "redirect:/auth/verificar-tela";
+        } catch (EmailJaCadastradoException e) {
+            session.removeAttribute(CADASTRO_PENDENTE_SESSION_KEY);
+            redirectAttributes.addFlashAttribute("mensagemErro", e.getMessage());
+            return "redirect:/cadastro";
+        }
+
+        session.removeAttribute(CADASTRO_PENDENTE_SESSION_KEY);
         redirectAttributes.addFlashAttribute("sucesso", "E-mail verificado com sucesso! Faça login.");
         return "redirect:/login";
     }

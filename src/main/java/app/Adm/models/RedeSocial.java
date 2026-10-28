@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import java.util.Objects;
 
 @Entity
@@ -16,7 +15,8 @@ public class RedeSocial {
     private int quantidadeDeSeguidores;
     private String linkDoPerfil;
 
-    public RedeSocial(){}
+    public RedeSocial() {
+    }
 
     public RedeSocial(String nome, int quantidadeDeSeguidores, String linkDoPerfil) {
         this.nome = nome;
@@ -50,9 +50,12 @@ public class RedeSocial {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RedeSocial that = (RedeSocial) o;
-        return quantidadeDeSeguidores == that.quantidadeDeSeguidores && Objects.equals(nome, that.nome) && Objects.equals(linkDoPerfil, that.linkDoPerfil);
+        return quantidadeDeSeguidores == that.quantidadeDeSeguidores
+                && Objects.equals(nome, that.nome)
+                && Objects.equals(linkDoPerfil, that.linkDoPerfil);
     }
 
     @Override
